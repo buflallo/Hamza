@@ -1,104 +1,63 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-import StyledTabs from './Menu';
-import StyledTab from './Menu';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { StyledTab, StyledTabs } from "./Menu";
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
+const pages = ["Works", "About", "Contact"];
 
 export default function ResponsiveAppBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [value, setValue] = React.useState(0);
+  const theme = useTheme();
+  const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
-
   return (
-    <AppBar position="static">
-      <Container maxWidth="lg">
+    <AppBar
+      sx={{
+        boxShadow: "inset 0px -5px 3px rgba(0,0,0,0.1)",
+        backgroundColor: "#ffffff42",
+        backdropFilter: "blur(10px)",
+      }}
+      position="fixed"
+      width="inherit"
+      alignSelf="center"
+      color="transparent"
+    >
+      <Container maxWidth="none">
         <Toolbar disableGutters>
-          
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', sm: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', sm: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{  mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="#"
+            value={"scascas"}
             sx={{
               mr: 2,
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
           >
-            HL
+            {sm ?"HL" : "HAMZA LACHKAR"}
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
+          <Box
+            sx={{
+              justifyContent: "end",
+              flexGrow: 1,
+              display: "flex",
+            }}
+          >
             <StyledTabs
               value={value}
               onChange={handleChange}
@@ -106,19 +65,11 @@ export default function ResponsiveAppBar() {
               centered
             >
               {pages.map((page) => (
-                    <StyledTab label={page} />
-                ))}
+                <StyledTab label={page} />
+              ))}
             </StyledTabs>
           </Box>
 
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>

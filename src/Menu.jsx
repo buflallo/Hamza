@@ -19,19 +19,19 @@ export const StyledTabs = styled((props) => (
   '& .MuiTabs-indicatorSpan': {
     maxWidth: 40,
     width: '100%',
-    backgroundColor: '#635ee7',
+    backgroundColor: '#E1FF00',
   },
 });
 
-export const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+export const StyledTab = styled((props) => <Tab href={'#' + props.label} disableRipple {...props} />)(
   ({ theme }) => ({
+    fontFamily: 'PPFuji',
     textTransform: 'none',
     fontWeight: theme.typography.fontWeightRegular,
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: "calc(1em + 0.5vw)",
     marginRight: theme.spacing(1),
-    color: 'rgba(255, 255, 255, 0.7)',
     '&.Mui-selected': {
-      color: '#fff',
+      color: '#1D1B1B',
     },
     '&.Mui-focusVisible': {
       backgroundColor: 'rgba(100, 95, 228, 0.32)',
