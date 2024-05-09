@@ -98,7 +98,7 @@ const Skill = (props) => {
         border: "2px solid black",
       }}
     >
-      <CardContent sx={{ maxWidth: {xs:"min-content", md: "100%"}, width: "fit-content", padding: "24px 30px" }}>
+      <CardContent sx={{ maxWidth: {xs:"max-content", sm: "min-content", md: "100%"}, width: "fit-content", padding: "24px 30px" }}>
         <CardHeader
           sx={{  width: "fit-content", padding: "0", marginBottom: "10px" }}
           avatar={<SvgIcon
@@ -114,13 +114,14 @@ const Skill = (props) => {
           }
           title={
             <Typography
-            fontSize={{ xs: "32px", md: "2vw" }}
+            fontSize={{ xs: "26px", sm: "32px", md:"2vw" }}
             variant="h5"
               sx={{
                 zIndex: "1",
                 textTransform: "capitalize",
                 fontWeight: "bold",
               }}
+              width="min-content"
               color="text.secondary"
               gutterBottom
             >

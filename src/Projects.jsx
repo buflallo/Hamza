@@ -28,7 +28,7 @@ const ProjectCard = (props) => {
       <Typography color={"white"} variant="h3" fontSize={{ xs: "60px", md: "5vw" }}>
         {props.title}
       </Typography>
-      <Typography textAlign={"center"} fontSize={{ xs: "26px", md: "2vw" }} color={"white"} variant="h6">
+      <Typography textAlign={"center"} width={"max-content"} fontSize={{ xs: "26px", md: "2vw" }} color={"white"} variant="h6">
         {props.desc}
       </Typography>
     </Grid>
@@ -39,7 +39,7 @@ const ProjectCard = (props) => {
       <img
         src={props.img}
         width={"100%"}
-        height={props.index !== 3 ? "70%" : "auto"}
+        height={"auto"}
         alt={`${props.title} image`}
       />
     </Grid>
@@ -89,7 +89,7 @@ export default function Projects() {
                   )
                 : (image = 2) && (
                     <>
-                      <ProjectCard el={2} img={el[1]} />
+                      <ProjectCard el={2}  img={el[1]} />
                       <ProjectCard el={1} title={el[0][0]} desc={el[0][1]} />
                       <ProjectCard el={3} />
                     </>
@@ -107,7 +107,7 @@ export default function Projects() {
                     <>
                       <ProjectCard el={3} />
                       <ProjectCard el={1} title={el[0][0]} desc={el[0][1]} />
-                      <ProjectCard  index={index} el={2} img={el[1]} />
+                      <ProjectCard  el={2} img={el[1]} />
                     </>
                   );
             }
