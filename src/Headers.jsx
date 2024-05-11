@@ -57,7 +57,7 @@ const Headers = () => {
           Software & Web Developer
         </Typography>
         <Typography
-          color="#FFFFFF"
+          color={{ xs: "#1D1B1B", sm: "#FFFFFF"}}
           variant="h3"
           fontSize={{ xs: "100px", md: "calc(1rem + 7vw + 1vh)" }}
           sx={{ textTransform: "uppercase",
