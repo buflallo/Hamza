@@ -1,55 +1,55 @@
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('fonts/HelveticaNeueBlack.otf') format('opentype');
+  src: url('/fonts/HelveticaNeueBlack.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('fonts/HelveticaNeueHeavy.otf') format('opentype');
+  src: url('/fonts/HelveticaNeueHeavy.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('fonts/HelveticaNeueMedium.otf') format('opentype');
+  src: url('/fonts/HelveticaNeueMedium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('fonts/HelveticaNeueLight.otf') format('opentype');
+  src: url('/fonts/HelveticaNeueLight.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'HelveticaNeue';
-  src: url('fonts/HelveticaNeueThin.otf') format('opentype');
+  src: url('/fonts/HelveticaNeueThin.otf') format('opentype');
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SpaceMono';
-  src: url('fonts/SpaceMono-Bold.ttf') format('truetype');
+  src: url('/fonts/SpaceMono-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'SpaceMono';
-  src: url('fonts/SpaceMono-Regular.ttf') format('truetype');
+  src: url('/fonts/SpaceMono-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'DeliriumNcv';
-  src: url('fonts/DeliriumNcv.ttf') format('truetype');
+  src: url('/fonts/DeliriumNcv.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -57,14 +57,14 @@
 /* PPFuji-Bold.otf */
 @font-face {
   font-family: 'PPFuji';
-  src: url('fonts/PPFuji-Bold.otf') format('opentype');
+  src: url('/fonts/PPFuji-Bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'PPFuji';
-  src: url('fonts/PPFuji-Light.otf') format('opentype');
+  src: url('/fonts/PPFuji-Light.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
 }
