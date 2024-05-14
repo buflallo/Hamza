@@ -1,7 +1,7 @@
 {
-  "name": "codespaces-react",
+  "name": "hamza-art",
   "version": "0.1.0",
-  "homepage": "https://buflallo.github.io/Hamza/",
+  "homepage": "https://hlachkar.me",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -24,6 +24,7 @@
   },
   "scripts": {
     "start": "BROWSER=none WDS_SOCKET_PORT=0 vite --port 3000",
+    "dev": "BROWSER=none WDS_SOCKET_PORT=0 node server.js",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",

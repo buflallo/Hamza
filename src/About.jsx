@@ -10,10 +10,12 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 // import tween
 import { useEffect, useRef, useState } from "react";
-import Descreptif from "./Descreptif";
+import LinearProgress from '@mui/material/LinearProgress';
+
 
 export default function About() {
   const refContainer = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
   // const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
@@ -22,6 +24,7 @@ export default function About() {
       width: refContainer.current.clientWidth,
       height: refContainer.current.clientHeight,
     };
+    setIsLoading(true);
     // === THREE.JS CODE START ===
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera(
@@ -38,6 +41,8 @@ export default function About() {
     // use ref as a mount point of the Three.js scene instead of the document.body
     refContainer.current &&
       refContainer.current.appendChild(renderer.domElement);
+    // refcontainer append loading bar
+    
     // var geometry = new THREE.BoxGeometry(1, 1, 1);
     // var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     let loader = new GLTFLoader();
@@ -83,7 +88,8 @@ export default function About() {
         scene.add(object);
       },
       function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        if (xhr.loaded >= xhr.total)
+          setIsLoading(false);
       },
       function (error) {
         console.error("An error happened", error);
@@ -166,7 +172,9 @@ export default function About() {
           // right: "0",
           // bottom: "-1200px",
         }}
-      ></Box>
+      >
+        {isLoading && <LinearProgress />}
+      </Box>
     </Box>
   );
 }

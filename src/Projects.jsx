@@ -12,7 +12,6 @@ const projectData = [
 ];
 
 const ProjectCard = (props) => {
-  console.log(props.index);
   return props.el == 1 ? (
     <Grid
       flexDirection={"column"}

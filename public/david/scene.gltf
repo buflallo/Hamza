@@ -151,20 +151,12 @@
     }
   ],
   "images": [
-    {
-      "uri": "textures/Material_u1_v1_baseColor.png"
-    }
   ],
   "materials": [
     {
       "doubleSided": true,
       "name": "Material_u1_v1",
       "pbrMetallicRoughness": {
-        "baseColorTexture": {
-          "index": 0
-        },
-        "metallicFactor": 0.0,
-        "roughnessFactor": 0.9159103585
       }
     }
   ],

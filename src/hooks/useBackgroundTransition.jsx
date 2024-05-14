@@ -6,8 +6,6 @@ const useBackgroundTransition = () => {
   useEffect(() => {
     const setBackground = () => {
       if (!window) return;
-      else
-        console.log(window.outerWidth);
       const scrollPosition = window.scrollY;
       const scrollBottom = document.body.scrollHeight - window.innerHeight;
       const transitionBottom = (scrollBottom - scrollPosition) / window.innerHeight;
@@ -42,7 +40,6 @@ const useBackgroundTransition = () => {
       // const backgroundImage = scrollBottom <= 0 ? 'url("background.jpg")' : 'none';
       const backgroundImage = 'url("background2.jpg")';
 
-      console.log(gradient, backgroundImage);
       // Combine gradient and background image
       let background = `${gradient}, ${backgroundImage}`;
       if (window.outerWidth < 600)
