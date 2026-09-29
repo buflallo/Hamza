@@ -3,6 +3,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { CONTACT_EMAIL, CV_URL, SOCIAL_LINKS, TAGS } from "./data/content";
 import useColorTransition from "./hooks/useColorTransition";
+import useInView from "./hooks/useInView";
+
+const Letters = ({ text, start }) =>
+  [...text].map((char, i) => (
+    <span key={i} className="letter" style={{ "--i": start + i }}>
+      {char}
+    </span>
+  ));
 
 const CONTACT_LINKS = [
   CONTACT_EMAIL && { label: "Email", href: `mailto:${CONTACT_EMAIL}` },
@@ -12,8 +20,10 @@ const CONTACT_LINKS = [
 
 export default function Footer() {
   const color = useColorTransition();
+  const [ref, inView] = useInView();
   return (
     <Box
+      ref={ref}
       component="footer"
       id="Contact"
       sx={{
@@ -36,24 +46,34 @@ export default function Footer() {
           color: "#FFFFFF",
         }}
       >
-        <Box component="h2" sx={{ m: 0, font: "inherit" }}>
+        <Box
+          component="h2"
+          className={`letters${inView ? " is-in" : ""}`}
+          sx={{ m: 0, font: "inherit" }}
+        >
+          <span className="visually-hidden">Let's connect</span>
           <Typography
             component="span"
+            aria-hidden="true"
+            className="misreg soft"
             sx={{ lineHeight: "1", display: "block" }}
             color={color}
             fontSize={{ xs: "100px", md: "calc(4rem + 12vw)" }}
             variant="h3"
           >
-            Let's
+            <Letters text="Let's" start={0} />
           </Typography>
           <Typography
             component="span"
+            aria-hidden="true"
+            className="misreg"
             sx={{ lineHeight: "1", display: "block" }}
             color={color}
             fontSize={{ xs: "100px", md: "12vw" }}
             variant="h3"
           >
-            connect
+            <Letters text="connect" start={6} />
+            <span className="caret" />
           </Typography>
         </Box>
       </Box>
@@ -80,6 +100,11 @@ export default function Footer() {
             <Box
               key={tag}
               component="li"
+              className={`pill${inView ? " is-in" : ""}`}
+              style={{
+                "--i": i,
+                "--tilt": `${[-3, 2, -2, 3][i % 4]}deg`,
+              }}
               sx={{
                 listStyle: "none",
                 border: "2px solid black",
@@ -148,9 +173,15 @@ export default function Footer() {
                       target: "_blank",
                       rel: "noopener noreferrer",
                     })}
+                    className="link"
                     style={{ color: "inherit", textDecoration: "none" }}
                   >
                     {label.toUpperCase()}
+                    {external && (
+                      <span className="arrow" aria-hidden="true">
+                        {" ↗"}
+                      </span>
+                    )}
                   </a>
                 </Typography>
               );
