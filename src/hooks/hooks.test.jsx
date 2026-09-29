@@ -59,3 +59,18 @@ test("useActiveSection reports the section that is intersecting", () => {
   expect(result.current).toBeNull();
   vi.unstubAllGlobals();
 });
+
+test("backdrop layers hand over: painting, print, ghost, then yellow", async () => {
+  const { layerOpacities } = await import("./useBackgroundTransition");
+  const top = layerOpacities(0, 5);
+  expect(top.full).toBe(1);
+  expect(top.ghost).toBe(0);
+  const middle = layerOpacities(3, 3);
+  expect(middle.full).toBe(0);
+  expect(middle.print).toBe(0);
+  expect(middle.ghost).toBeCloseTo(0.55);
+  const bottom = layerOpacities(6, 0);
+  expect(bottom.ghost).toBe(0);
+  expect(bottom.veil).toBe(0);
+  expect(bottom.foot).toBe(1);
+});

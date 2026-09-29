@@ -57,12 +57,12 @@ const ProjectText = ({ title, category, repo, demo, index }) => {
         className={rise}
         fontSize={{ xs: "48px", md: "5vw" }}
       >
-        {title}
+        <span className="misreg">{title}</span>
       </Typography>
       <Typography
         textAlign="inherit"
         fontSize={{ xs: "22px", md: "2vw" }}
-        color="white"
+        color="#E1FF00"
         variant="h6"
         component="p"
         className={rise}

@@ -200,6 +200,7 @@ export default function About() {
           id="about-title"
           variant="h3"
           component="h2"
+          className="misreg"
           color="#FFFFFF"
           fontSize={{ xs: "80px", md: "7vw" }}
           sx={{ textTransform: "uppercase" }}

@@ -1,5 +1,6 @@
 import "./App.css";
 import Header from "./Header";
+import Backdrop from "./Backdrop";
 import useBackgroundTransition from "./hooks/useBackgroundTransition";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -43,9 +44,10 @@ const theme = createTheme({
 });
 
 function App() {
-  useBackgroundTransition();
+  const layers = useBackgroundTransition();
   return (
     <ThemeProvider theme={theme}>
+      <Backdrop ref={layers} />
       <Header />
     </ThemeProvider>
   );
