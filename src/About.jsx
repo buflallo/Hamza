@@ -43,6 +43,24 @@ export default function About() {
     const lightHolder = new THREE.Group();
     lightHolder.add(light);
     scene.add(lightHolder);
+    // A warm light that chases the pointer (drifts on its own when idle).
+    const chaser = new THREE.PointLight(0xfff2c4, 3, 0, 1.5);
+    chaser.position.set(0, 0.6, 1.2);
+    scene.add(chaser);
+    const chaseTarget = new THREE.Vector3(0, 0.6, 1.2);
+    let lastPointer = -Infinity;
+    const onPointerMove = (event) => {
+      const rect = container.getBoundingClientRect();
+      const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
+      const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
+      chaseTarget.set(
+        Math.max(-1.6, Math.min(1.6, nx * 1.4)),
+        Math.max(-1.2, Math.min(1.2, -ny * 1.1)),
+        1.2,
+      );
+      lastPointer = performance.now();
+    };
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(-1, 1, 1);
     scene.add(directionalLight);
@@ -59,10 +77,29 @@ export default function About() {
     let frame = 0;
     let loadStarted = false;
 
-    const render = () => {
+    // The turn breathes (slow -> a touch faster -> slow) and surges with scroll.
+    let surge = 0;
+    let lastScroll = window.scrollY;
+    const render = (now = performance.now()) => {
       frame = 0;
       if (disposed || !visible) return;
-      if (object && !reduceMotion.matches) object.rotation.y -= 0.01;
+      const scrollDelta = Math.abs(window.scrollY - lastScroll);
+      lastScroll = window.scrollY;
+      surge = Math.min(0.09, surge * 0.94 + scrollDelta * 0.0009);
+      if (object && !reduceMotion.matches) {
+        const breath = 0.006 + 0.004 * Math.sin(now / 1800);
+        object.rotation.y -= breath + surge;
+      }
+      if (!reduceMotion.matches) {
+        if (now - lastPointer > 2500) {
+          chaseTarget.set(
+            Math.cos(now / 2400) * 1.3,
+            0.4 + Math.sin(now / 3100) * 0.7,
+            1.2,
+          );
+        }
+        chaser.position.lerp(chaseTarget, 0.06);
+      }
       lightHolder.quaternion.copy(camera.quaternion);
       renderer.render(scene, camera);
       frame = requestAnimationFrame(render);
@@ -125,6 +162,7 @@ export default function About() {
       cancelAnimationFrame(frame);
       observer.disconnect();
       resizeObserver.disconnect();
+      window.removeEventListener("pointermove", onPointerMove);
       scene.traverse((node) => {
         if (node.isMesh) node.geometry.dispose();
       });

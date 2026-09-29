@@ -7,72 +7,82 @@ import Link from "@mui/material/Link";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Title from "./Title";
+import useInView from "./hooks/useInView";
 import { PROJECTS } from "./data/content";
 
-const ProjectText = ({ title, category, repo, demo }) => (
-  <Grid
-    item
-    xs={12}
-    sm={6}
-    md={3}
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <Typography
-      color="white"
-      variant="h3"
-      component="h3"
-      fontSize={{ xs: "48px", md: "5vw" }}
+const ProjectText = ({ title, category, repo, demo }) => {
+  const [ref, inView] = useInView();
+  const rise = `rise${inView ? " is-in" : ""}`;
+  return (
+    <Grid
+      item
+      ref={ref}
+      xs={12}
+      sm={6}
+      md={3}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      {title}
-    </Typography>
-    <Typography
-      textAlign="center"
-      fontSize={{ xs: "22px", md: "2vw" }}
-      color="white"
-      variant="h6"
-      component="p"
-    >
-      {category}
-    </Typography>
-    {(repo || demo) && (
-      <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-        {repo && (
-          <Link
-            href={repo}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="inherit"
-            sx={{ color: "#E1FF00" }}
-          >
-            Code<span className="visually-hidden"> for {title}</span>
-          </Link>
-        )}
-        {demo && (
-          <Link
-            href={demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            color="inherit"
-            sx={{ color: "#E1FF00" }}
-          >
-            Live<span className="visually-hidden"> demo of {title}</span>
-          </Link>
-        )}
-      </Box>
-    )}
-  </Grid>
-);
+      <Typography
+        color="white"
+        variant="h3"
+        component="h3"
+        className={rise}
+        fontSize={{ xs: "48px", md: "5vw" }}
+      >
+        {title}
+      </Typography>
+      <Typography
+        textAlign="center"
+        fontSize={{ xs: "22px", md: "2vw" }}
+        color="white"
+        variant="h6"
+        component="p"
+        className={rise}
+        style={{ "--rise-delay": "0.25s" }}
+      >
+        {category}
+      </Typography>
+      {(repo || demo) && (
+        <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+          {repo && (
+            <Link
+              href={repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              color="inherit"
+              sx={{ color: "#E1FF00" }}
+            >
+              Code<span className="visually-hidden"> for {title}</span>
+            </Link>
+          )}
+          {demo && (
+            <Link
+              href={demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              color="inherit"
+              sx={{ color: "#E1FF00" }}
+            >
+              Live<span className="visually-hidden"> demo of {title}</span>
+            </Link>
+          )}
+        </Box>
+      )}
+    </Grid>
+  );
+};
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const ProjectMedia = ({ media, alt, title }) => {
+const ProjectMedia = ({ media, alt, title, ratio }) => {
+  const [ref, inView] = useInView();
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(() => !prefersReducedMotion());
 
@@ -85,22 +95,26 @@ const ProjectMedia = ({ media, alt, title }) => {
 
   return (
     <Grid item xs={12} sm={6} md={4} sx={{ position: "relative" }}>
-      <video
-        ref={videoRef}
-        src={`${media}.mp4`}
-        poster={`${media}.webp`}
-        aria-label={alt}
-        width="100%"
-        height="auto"
-        style={{ display: "block" }}
-        autoPlay={playing}
-        loop
-        muted
-        playsInline
-        preload="none"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-      />
+      <div
+        ref={ref}
+        className={`develop${inView ? " is-in" : ""}`}
+        style={{ aspectRatio: ratio }}
+      >
+        <video
+          className="develop-media"
+          ref={videoRef}
+          src={`${media}.mp4`}
+          poster={`${media}.webp`}
+          aria-label={alt}
+          autoPlay={playing}
+          loop
+          muted
+          playsInline
+          preload="none"
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+        />
+      </div>
       <IconButton
         onClick={toggle}
         aria-label={`${playing ? "Pause" : "Play"} ${title} preview`}

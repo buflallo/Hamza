@@ -7,6 +7,7 @@ import CardHeader from "@mui/material/CardHeader";
 import { styled } from "@mui/system";
 import { Box } from "@mui/system";
 import Title from "./Title";
+import useInView from "./hooks/useInView";
 import { QUOTE, SKILLS } from "./data/content";
 
 const NestjsIcon = (props) => (
@@ -91,8 +92,12 @@ const DivWithLeftBar = styled("div")({
 });
 
 const Skill = (props) => {
+  const [ref, inView] = useInView();
   return (
     <Card
+      ref={ref}
+      className={`rise${inView ? " is-in" : ""}`}
+      style={{ "--rise-delay": `${(props.index || 0) * 0.15}s` }}
       sx={{
         width: "fit-content",
         maxWidth: "100%",
@@ -192,9 +197,10 @@ export default function Skills() {
           flexWrap: { xs: "wrap", md: "nowrap" },
         }}
       >
-        {SKILLS.map(({ id, title, color, viewBox, description }) => (
+        {SKILLS.map(({ id, title, color, viewBox, description }, index) => (
           <Skill
             key={id}
+            index={index}
             subLineColor={color}
             icon={ICONS[id]}
             viewBox={viewBox}
