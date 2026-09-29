@@ -1,55 +1,55 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useState, useEffect } from "react";
 
-export default function Projects(props) {
-  const [scrollPosition, setScrollPosition] = useState(0);
-
-  const handleScroll = () => {
-    const position = window.pageYOffset;
-    setScrollPosition(position);
-  };
+export default function Title({ title, id }) {
+  const starRef = useRef(null);
 
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduceMotion.matches) return undefined;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      if (starRef.current) {
+        starRef.current.style.transform = `rotate(${window.scrollY / 10}deg)`;
+      }
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
     };
   }, []);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-      }}
-    >
+    <Box sx={{ display: "flex" }}>
       <Box
+        ref={starRef}
         sx={{
-          transform: `translate3d(0px, 0px, 0px) rotate(${
-            scrollPosition / 10
-          }deg)`,
           width: { xs: "60px", md: "3vw" },
           height: { xs: "60px", md: "3vw" },
           ml: "10px",
           mr: "10px",
+          willChange: "transform",
         }}
       >
-        <img
-          width={"100%"}
-          height={"100%"}
-          src="star.png"
-          alt="Your Description"
-        />
+        <img width="100%" height="100%" src="star.png" alt="" loading="lazy" />
       </Box>
       <Typography
-        color={"white"}
+        id={id}
+        color="white"
         sx={{ textAlign: "left" }}
         variant="h5"
+        component="h2"
         fontSize={{ xs: "2rem", md: "calc(6vw/(1.618*1.5))" }}
-        alignContent={"center"}
+        alignContent="center"
       >
-        {props.title}
+        {title}
       </Typography>
     </Box>
   );

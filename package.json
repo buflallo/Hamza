@@ -1,21 +1,15 @@
 {
   "name": "hamza-art",
   "version": "0.1.0",
-  "homepage": "https://hlachkar.me",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^14.4.3",
-    "@tweenjs/tween.js": "^23.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three": "^0.163.0",
-    "web-vitals": "^3.1.0"
+    "three": "^0.163.0"
   },
   "overrides": {
     "@svgr/webpack": "^8.0.1",
@@ -23,19 +17,14 @@
     "postcss": "^8.4.31"
   },
   "scripts": {
-    "start": "BROWSER=none WDS_SOCKET_PORT=0 vite --port 3000",
-    "dev": "BROWSER=none WDS_SOCKET_PORT=0 node server.js",
+    "start": "vite --port 3000",
+    "dev": "vite --port 3000",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d dist"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --max-warnings=0",
+    "format": "prettier --write src"
   },
   "browserslist": {
     "production": [
@@ -50,8 +39,15 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
     "@vitejs/plugin-react": "^4.1.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^22.1.0",
+    "prettier": "^3.2.5",
     "vite": "^4.5.3",
     "vitest": "^0.34.6"
   }

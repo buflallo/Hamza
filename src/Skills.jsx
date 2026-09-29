@@ -148,6 +148,9 @@ const Skill = (props) => {
 export default function Skills() {
   return (
     <Box
+      component="section"
+      id="Skills"
+      aria-label="Skills"
       sx={{
         pt: "12vh",
         mt: "50px",
@@ -173,24 +176,24 @@ export default function Skills() {
           icon={SoftwareIcon}
           maxWidth="25vw"
           viewBox="0 -3 46 46"
-          title="Software Developement"
-          description="With a Solid foundation in software development, I excel in languages like C, C++, and TypeScript. My expertise extends to implementing efficient design patterns to enhance performance and scalability, ensuring that each project I undertake operates seamlessly and effectively."
+          title="Software Development"
+          description="With a solid foundation in software development, I excel in languages like C, C++, and TypeScript. My expertise extends to implementing efficient design patterns to enhance performance and scalability, ensuring that each project I undertake operates seamlessly and effectively."
         />
         <Skill
           subLineColor="#61DAFB"
           maxWidth="25vw"
           icon={ReactIcon}
           viewBox="0 0 24 24"
-          title="FrontEnd Developement"
-          description="proficiency in crafting captivating user interfaces using technologies like React, Vue.js, HTML, and CSS. With a keen eye for design and usability, I leverage tools like Figma to create intuitive and visually appealing experiences that engage users effectively"
+          title="Frontend Development"
+          description="Proficiency in crafting captivating user interfaces using technologies like React, Vue.js, HTML, and CSS. With a keen eye for design and usability, I leverage tools like Figma to create intuitive and visually appealing experiences that engage users effectively"
         />
         <Skill
           subLineColor="#E0234E"
           icon={NestjsIcon}
           maxWidth="25vw"
           viewBox="0 0 24 24"
-          title="BackEnd Developement"
-          description="crafting resilient server-side systems using frameworks like Nest.js and Laravel. Proficient in database management with MySQL and PostgreSQL, I excel in creating efficient data architectures. My expertise in server-side programming and API development ensures the creation of robust, scalable web solutions"
+          title="Backend Development"
+          description="Crafting resilient server-side systems using frameworks like Nest.js and Laravel. Proficient in database management with MySQL and PostgreSQL, I excel in creating efficient data architectures. My expertise in server-side programming and API development ensures the creation of robust, scalable web solutions"
         />
         <Card
           sx={{

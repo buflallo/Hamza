@@ -5,24 +5,6 @@ import useColorTransition from "./hooks/useColorTransition";
 
 const Headers = () => {
   const color = useColorTransition();
-  // const [height, setHeight] = React.useState("90vh");
-
-  // React.useEffect(() => {
-  //   window.addEventListener("resize", () => {
-  //     if (768 - window.innerHeight > 0) {
-  //       setHeight("fit-content");
-  //     }
-  //     else {
-  //       setHeight("90vh");
-  //     }
-  //   });
-  //   return () => {
-  //     window.removeEventListener("resize", () => {
-  //       setHeight(window.innerHeight);
-  //     });
-  //   };
-  // }, []);
-
   return (
     <Box
       sx={{
@@ -30,7 +12,7 @@ const Headers = () => {
         flexDirection: "column",
         justifyContent: { xs: "end", md: "space-around" },
         alignItems: "center", // center vertically
-        height: "fit-content", // "90vh
+        height: "fit-content",
         maxHeight: "1600px",
         pt: "16vh",
         width: "100%",
@@ -49,6 +31,7 @@ const Headers = () => {
       >
         <Typography
           variant="h3"
+          component="h1"
           color="#2E05D1"
           fontSize={{ xs: "100px", md: "calc(1rem + 7vw + 1vh)" }}
           sx={{ textTransform: "uppercase", 
@@ -57,6 +40,7 @@ const Headers = () => {
           Software & Web Developer
         </Typography>
         <Typography
+          aria-hidden="true"
           color={{ xs: "#1D1B1B", sm: "#FFFFFF"}}
           variant="h3"
           fontSize={{ xs: "100px", md: "calc(1rem + 7vw + 1vh)" }}
@@ -94,6 +78,7 @@ const Headers = () => {
           PIZZA AND ART.
         </Typography>
         <Typography
+          aria-hidden="true"
           color={color}
           sx={{
             maxWidth: { xs: "400px", sm: "60vw" },

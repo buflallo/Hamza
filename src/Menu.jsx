@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
 
 
 export const StyledTabs = styled((props) => (
@@ -32,6 +31,10 @@ export const StyledTab = styled((props) => <Tab href={'#' + props.label} disable
     marginRight: theme.spacing(1),
     '&.Mui-selected': {
       color: '#1D1B1B',
+    },
+    '&:focus-visible': {
+      outline: '2px solid #2E05D1',
+      outlineOffset: '-2px',
     },
     '&.Mui-focusVisible': {
       backgroundColor: 'rgba(100, 95, 228, 0.32)',

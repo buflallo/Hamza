@@ -1,14 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { StyledTab, StyledTabs } from "./Menu";
+import { SOCIAL_LINKS, TAGS } from "./data/content";
 import useColorTransition from "./hooks/useColorTransition";
 
 export default function Footer() {
   const color = useColorTransition();
   return (
     <Box
+      component="footer"
       id="Contact"
       sx={{
         display: "flex",
@@ -46,7 +46,11 @@ export default function Footer() {
         </Typography>
       </Box>
       <Box
+        component="ul"
+        aria-label="Areas of expertise"
         sx={{
+          m: 0,
+          p: 0,
           display: "flex",
           flexDirection: "row",
           justifyContent: "start",
@@ -56,80 +60,24 @@ export default function Footer() {
           width: { xs: "100%", md: "80%" },
         }}
       >
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            height: "min-content",
-            ml: { xs: "0", md: "-6vw" },
-          }}
-        >
-          <Typography color={color} variant="h6">
-            Web Development
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            height: "min-content",
-          }}
-        >
-          <Typography color={color} variant="h6">
-            Software Engineering
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            height: "min-content",
-          }}
-        >
-          <Typography color={color} variant="h6">
-            IT Solutions
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            height: "min-content",
-          }}
-        >
-          <Typography color={color} variant="h6">
-            UI/UX Design
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            // ml: "-6vw",
-            height: "min-content",
-          }}
-        >
-          <Typography color={color} variant="h6">
-            Mathematics
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            border: "2px solid black",
-            borderRadius: "50px",
-            padding: "5px",
-            height: "min-content",
-          }}
-        >
-          <Typography color={color} variant="h6">
-            Cyber Security
-          </Typography>
-        </Box>
+        {TAGS.map((tag, i) => (
+          <Box
+            key={tag}
+            component="li"
+            sx={{
+              listStyle: "none",
+              border: "2px solid black",
+              borderRadius: "50px",
+              padding: "5px",
+              height: "min-content",
+              ml: i === 0 ? { xs: "0", md: "-6vw" } : 0,
+            }}
+          >
+            <Typography color={color} variant="h6" component="span">
+              {tag}
+            </Typography>
+          </Box>
+        ))}
         <Box
           sx={{
             width: "100%",
@@ -152,7 +100,7 @@ export default function Footer() {
             }}
           >
             <Typography color={color} variant="h6">
-              ARE YOU MINDING A PROJECT?
+              HAVE A PROJECT IN MIND?
             </Typography>
             {/* <Button></Button> */}
           </Box>
@@ -168,21 +116,18 @@ export default function Footer() {
               // color: "#FFFFFF",
             }}
           >
-            <Typography color={color} variant="h6">
-              <a href="https://www.instagram.com/hmazi96/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                INSTAGRAM
-              </a>
-            </Typography>
-            <Typography color={color} variant="h6">
-              <a href="https://www.linkedin.com/in/hamza-lachqar/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                LINKEDIN
-              </a>
-            </Typography>
-            <Typography color={color} variant="h6">
-              <a href="https://github.com/buflallo/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'none' }}>
-                GITHUB
-              </a>
-            </Typography>
+            {SOCIAL_LINKS.map(({ label, href }) => (
+              <Typography key={label} color={color} variant="h6">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
+                  {label.toUpperCase()}
+                </a>
+              </Typography>
+            ))}
           </Box>
         </Box>
       </Box>
