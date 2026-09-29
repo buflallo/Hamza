@@ -96,9 +96,15 @@ const Skill = (props) => {
   return (
     <Card
       ref={ref}
-      className={`rise${inView ? " is-in" : ""}`}
-      style={{ "--rise-delay": `${(props.index || 0) * 0.15}s` }}
+      className={`rise skill${inView ? " is-in" : ""}`}
+      style={{
+        "--rise-delay": `${(props.index || 0) * 0.15}s`,
+        "--ink": props.subLineColor,
+      }}
       sx={{
+        // off-kilter stagger on wide screens
+        mt: { md: ["0px", "60px", "20px"][props.index % 3] },
+        ml: { md: ["0px", "24px", "-6px"][props.index % 3] },
         width: "fit-content",
         maxWidth: "100%",
         border: "2px solid black",
@@ -115,6 +121,7 @@ const Skill = (props) => {
           sx={{ width: "fit-content", padding: "0", marginBottom: "10px" }}
           avatar={
             <SvgIcon
+              className="skill-icon"
               sx={{
                 width: { xs: "42px", md: "4vw" },
                 height: { xs: "42px", md: "4vw" },
@@ -139,15 +146,16 @@ const Skill = (props) => {
               color="text.secondary"
               gutterBottom
             >
-              <SpanSouline bgColor={props.subLineColor}>
+              <SpanSouline className="ink" bgColor={props.subLineColor}>
                 {props.title.split(" ")[0]}
               </SpanSouline>{" "}
               {props.title.split(" ").slice(1).join(" ")}
             </Typography>
           }
         />
-        <DivWithLeftBar>
+        <DivWithLeftBar className="skill-rule">
           <StyledDiv
+            className="skill-body"
             sx={{ fontSize: { xs: "1rem", lg: "calc(1rem + 0.5vw)" } }}
           >
             <Typography
@@ -195,6 +203,7 @@ export default function Skills() {
           width: "auto",
           justifyContent: "center",
           flexWrap: { xs: "wrap", md: "nowrap" },
+          alignItems: { md: "flex-start" },
         }}
       >
         {SKILLS.map(({ id, title, color, viewBox, description }, index) => (
