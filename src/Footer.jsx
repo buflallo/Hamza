@@ -32,6 +32,8 @@ export default function Footer() {
         justifyContent: "end",
         minHeight: "100vh",
         px: { xs: "4vw", md: 0 },
+        pb: { xs: "4vh", md: "5vh" },
+        gap: { md: "2vw" },
         boxSizing: "border-box",
       }}
     >
@@ -55,7 +57,7 @@ export default function Footer() {
           <Typography
             component="span"
             aria-hidden="true"
-            className="misreg soft"
+            className="misreg-hover soft"
             sx={{ lineHeight: "1", display: "block" }}
             color={color}
             fontSize={{ xs: "100px", md: "calc(4rem + 12vw)" }}
@@ -66,14 +68,13 @@ export default function Footer() {
           <Typography
             component="span"
             aria-hidden="true"
-            className="misreg"
+            className="misreg-hover"
             sx={{ lineHeight: "1", display: "block" }}
             color={color}
             fontSize={{ xs: "100px", md: "12vw" }}
             variant="h3"
           >
             <Letters text="connect" start={6} />
-            <span className="caret" />
           </Typography>
         </Box>
       </Box>
@@ -111,7 +112,7 @@ export default function Footer() {
                 borderRadius: "50px",
                 padding: "5px",
                 height: "min-content",
-                ml: i === 0 ? { xs: "0", md: "-6vw" } : 0,
+                ml: i === 0 ? { xs: "0", md: "-3vw" } : 0,
               }}
             >
               <Typography color={color} variant="h6" component="span">

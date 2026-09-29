@@ -10,7 +10,7 @@ import Title from "./Title";
 import useInView from "./hooks/useInView";
 import { PROJECTS } from "./data/content";
 
-const ProjectText = ({ title, category, repo, demo }) => {
+const ProjectText = ({ title, category, repo, demo, index }) => {
   const [ref, inView] = useInView();
   const rise = `rise${inView ? " is-in" : ""}`;
   return (
@@ -24,9 +24,32 @@ const ProjectText = ({ title, category, repo, demo }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
+        // phones: title always above its picture, alternating sides
+        order: { xs: index * 3, sm: 0 },
+        alignItems: {
+          xs: index % 2 ? "flex-end" : "flex-start",
+          sm: "center",
+        },
+        textAlign: { xs: index % 2 ? "right" : "left", sm: "center" },
+        pt: index
+          ? { xs: "56px !important", sm: "16px !important" }
+          : undefined,
       }}
     >
+      <Typography
+        aria-hidden="true"
+        className={rise}
+        sx={{
+          display: { xs: "block", sm: "none" },
+          color: "#E1FF00",
+          fontFamily: '"PPFuji", sans-serif',
+          fontWeight: "bold",
+          fontSize: "14px",
+          letterSpacing: "0.2em",
+        }}
+      >
+        {String(index + 1).padStart(2, "0")}
+      </Typography>
       <Typography
         color="white"
         variant="h3"
@@ -37,7 +60,7 @@ const ProjectText = ({ title, category, repo, demo }) => {
         {title}
       </Typography>
       <Typography
-        textAlign="center"
+        textAlign="inherit"
         fontSize={{ xs: "22px", md: "2vw" }}
         color="white"
         variant="h6"
@@ -81,7 +104,7 @@ const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const ProjectMedia = ({ media, alt, title, ratio }) => {
+const ProjectMedia = ({ media, alt, title, ratio, index }) => {
   const [ref, inView] = useInView();
   const videoRef = useRef(null);
   const [playing, setPlaying] = useState(() => !prefersReducedMotion());
@@ -94,11 +117,26 @@ const ProjectMedia = ({ media, alt, title, ratio }) => {
   };
 
   return (
-    <Grid item xs={12} sm={6} md={4} sx={{ position: "relative" }}>
-      <div
+    <Grid
+      item
+      xs={12}
+      sm={6}
+      md={4}
+      sx={{ position: "relative", order: { xs: index * 3 + 1, sm: 0 } }}
+    >
+      <Box
         ref={ref}
         className={`develop${inView ? " is-in" : ""}`}
         style={{ aspectRatio: ratio }}
+        sx={{
+          // phones: a slight tilt and an inset, alternating with the title side
+          width: { xs: "calc(100% - 28px)", sm: "100%" },
+          ml: { xs: index % 2 ? "auto" : 0, sm: 0 },
+          transform: {
+            xs: `rotate(${[-0.8, 1, -1.2, 0.8][index % 4]}deg)`,
+            sm: "none",
+          },
+        }}
       >
         <video
           className="develop-media"
@@ -114,7 +152,7 @@ const ProjectMedia = ({ media, alt, title, ratio }) => {
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
         />
-      </div>
+      </Box>
       <IconButton
         onClick={toggle}
         aria-label={`${playing ? "Pause" : "Play"} ${title} preview`}
@@ -180,10 +218,10 @@ export default function Projects() {
             <React.Fragment key={project.title}>
               {LAYOUTS[index % LAYOUTS.length].map((cell) => {
                 if (cell === "text") {
-                  return <ProjectText key={cell} {...project} />;
+                  return <ProjectText key={cell} index={index} {...project} />;
                 }
                 if (cell === "media") {
-                  return <ProjectMedia key={cell} {...project} />;
+                  return <ProjectMedia key={cell} index={index} {...project} />;
                 }
                 return <Spacer key={cell} />;
               })}

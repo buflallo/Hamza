@@ -104,7 +104,6 @@ const Skill = (props) => {
       sx={{
         // off-kilter stagger on wide screens
         mt: { md: ["0px", "60px", "20px"][props.index % 3] },
-        ml: { md: ["0px", "24px", "-6px"][props.index % 3] },
         width: "fit-content",
         maxWidth: "100%",
         border: "2px solid black",
@@ -204,6 +203,7 @@ export default function Skills() {
           justifyContent: "center",
           flexWrap: { xs: "wrap", md: "nowrap" },
           alignItems: { md: "flex-start" },
+          gap: { md: "12px", lg: "32px" },
         }}
       >
         {SKILLS.map(({ id, title, color, viewBox, description }, index) => (
