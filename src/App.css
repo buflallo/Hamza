@@ -59,6 +59,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Skewed entrance transforms must not create a sideways scrollbar. */
+html,
+body {
+  overflow-x: clip;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
