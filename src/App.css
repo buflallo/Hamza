@@ -269,9 +269,6 @@ header:hover .misreg {
   animation: grow-down 0.7s ease-out backwards;
   animation-delay: calc(var(--rise-delay, 0s) + 0.7s);
 }
-.skill.is-in .skill-icon {
-  animation: wobble 4s steps(1, end) 1.5s infinite;
-}
 @keyframes ink {
   from {
     transform: scaleX(0);
@@ -287,27 +284,22 @@ header:hover .misreg {
     transform: scaleY(0);
   }
 }
-@keyframes wobble {
-  0% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-4deg);
-  }
-  50% {
-    transform: rotate(3deg);
-  }
-  75% {
-    transform: rotate(-2deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
 
 /* ---- Footer: the last handshake ---- */
 .letters .letter {
   display: inline-block;
+}
+.letters.is-in .misreg-hover {
+  animation: misreg 2.2s steps(1, end) 1.2s 1;
+}
+.letters.is-in .misreg-hover.soft {
+  animation-name: misreg-soft;
+}
+.letters.is-in .misreg-hover:hover {
+  animation: misreg 0.9s steps(1, end) infinite;
+}
+.letters.is-in .misreg-hover.soft:hover {
+  animation-name: misreg-soft;
 }
 .letters:not(.is-in) .letter {
   opacity: 0;
@@ -315,14 +307,6 @@ header:hover .misreg {
 .letters.is-in .letter {
   animation: letter 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
   animation-delay: calc(var(--i) * 0.07s);
-}
-.caret {
-  display: inline-block;
-  width: 0.09em;
-  height: 0.72em;
-  margin-left: 0.06em;
-  background: #2e05d1;
-  animation: blink 1s steps(1, end) infinite;
 }
 .pill:not(.is-in) {
   opacity: 0;
@@ -387,20 +371,11 @@ header:hover .misreg {
     transform: rotate(var(--tilt)) scale(0.7) translateY(14px);
   }
 }
-@keyframes blink {
-  50% {
-    opacity: 0;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .caret {
-    display: none;
-  }
   .skill,
   .skill .ink::after,
   .skill .skill-rule::after,
-  .skill .skill-icon,
   .skill .skill-body::before,
   .skill .skill-body::after,
   .letters .letter,
@@ -412,7 +387,8 @@ header:hover .misreg {
     clip-path: none;
   }
   .develop::before,
-  .misreg {
+  .misreg,
+  .misreg-hover {
     animation: none;
   }
   .develop > .develop-media,
