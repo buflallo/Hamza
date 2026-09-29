@@ -7,7 +7,7 @@ test("skill titles keep their words separated", () => {
   render(<Skills />);
   SKILLS.forEach(({ title }) => {
     const heading = screen.getByText(
-      (_, el) => el?.tagName === "H5" && el.textContent === title,
+      (_, el) => el?.tagName === "H3" && el.textContent === title,
     );
     expect(heading).toBeInTheDocument();
   });

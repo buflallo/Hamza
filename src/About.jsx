@@ -171,6 +171,7 @@ export default function About() {
         <br />
         <Typography
           variant="h4"
+          component="p"
           fontSize={{ xs: "20px", md: "calc(6vw/(1.618*1.5))" }}
           color="#FFFFFF"
           fontWeight="500"

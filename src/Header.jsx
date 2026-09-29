@@ -3,11 +3,22 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import ResponsiveAppBar from "./ResponsiveAppBar";
 import Headers from "./Headers";
+import Projects from "./Projects";
+import Skills from "./Skills";
+import Footer from "./Footer";
 
+// Only the About section pulls in three.js, so it is the only lazy chunk.
 const LazyAbout = React.lazy(() => import("./About"));
-const LazyProjects = React.lazy(() => import("./Projects"));
-const LazySkills = React.lazy(() => import("./Skills"));
-const LazyFooter = React.lazy(() => import("./Footer"));
+
+// Reserves the section's space while its chunk loads, avoiding a layout shift.
+const AboutPlaceholder = () => (
+  <Box
+    id="About"
+    role="status"
+    aria-label="Loading"
+    sx={{ minHeight: "100vh" }}
+  />
+);
 
 const Header = () => (
   <React.Fragment>
@@ -23,15 +34,13 @@ const Header = () => (
       <ResponsiveAppBar />
       <Box component="main">
         <Headers />
-        <React.Suspense fallback={<div role="status">Loading…</div>}>
+        <React.Suspense fallback={<AboutPlaceholder />}>
           <LazyAbout />
-          <LazyProjects />
-          <LazySkills />
         </React.Suspense>
+        <Projects />
+        <Skills />
       </Box>
-      <React.Suspense fallback={null}>
-        <LazyFooter />
-      </React.Suspense>
+      <Footer />
     </Box>
   </React.Fragment>
 );

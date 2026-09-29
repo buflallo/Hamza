@@ -35,7 +35,6 @@ export default function ResponsiveAppBar() {
             noWrap
             component="a"
             href="#"
-            aria-label="Hamza Lachkar, back to top"
             sx={{
               mr: 2,
               flexGrow: 1,
@@ -46,7 +45,13 @@ export default function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            {sm ? "HL" : "HAMZA LACHKAR"}
+            {sm ? (
+              <>
+                HL<span className="visually-hidden"> Hamza Lachkar</span>
+              </>
+            ) : (
+              "HAMZA LACHKAR"
+            )}
           </Typography>
           <Box
             sx={{

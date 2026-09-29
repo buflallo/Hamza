@@ -124,6 +124,7 @@ const Skill = (props) => {
             <Typography
               fontSize={{ xs: "26px", sm: "32px", md: "2vw" }}
               variant="h5"
+              component="h3"
               sx={{
                 zIndex: "1",
                 textTransform: "capitalize",
@@ -148,6 +149,7 @@ const Skill = (props) => {
               fontSize="inherit"
 
               variant="h6"
+              component="p"
             >
               {props.description}
             </Typography>
