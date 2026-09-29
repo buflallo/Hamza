@@ -22,7 +22,7 @@ const useColorTransition = () => {
   const [color, setColor] = React.useState(() => changeColor(0));
   const update = React.useCallback(
     () => setColor(changeColor(scrolledFraction())),
-    []
+    [],
   );
   useScrollFrame(update);
   return color;

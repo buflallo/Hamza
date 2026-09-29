@@ -15,12 +15,12 @@ Personal portfolio built with React, MUI and Three.js, bundled with Vite and dep
 
 ## Structure
 
-- `src/data/content.js` – nav sections, projects, tags and social links. Edit content here.
-- `src/About.jsx` – Three.js scene; loads and animates only while on screen.
+- `src/data/content.js` – nav sections, projects, skills, tags and social links. Edit content here. Set `CONTACT_EMAIL` / `CV_URL` to show those links in the footer, and add `repo` / `demo` URLs to a project to show its links.
+- `src/About.jsx` – Three.js scene; loads and animates only while on screen. The model is `public/david/scene.glb` (meshopt-compressed, UVs and textures stripped).
 - `src/hooks/` – scroll-driven background/colour effects (one update per frame).
 - `public/projects/` – project previews (`.mp4` + `.webp` poster). Convert new GIFs to video instead of committing them.
 - `public/fonts/` – only the font weights the theme uses, as `woff2`.
 
 ## Deployment
 
-Pushing to `main` runs `.github/workflows/main.yml` (lint, test, build, publish `dist/` to GitHub Pages).
+`.github/workflows/main.yml` runs lint, tests and the build on every push and pull request to `main`; pushes to `main` also publish `dist/` to GitHub Pages.

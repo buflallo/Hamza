@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Link from "@mui/material/Link";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Title from "./Title";
 import { PROJECTS } from "./data/content";
 
-const ProjectText = ({ title, category }) => (
+const ProjectText = ({ title, category, repo, demo }) => (
   <Grid
     item
     xs={12}
@@ -35,29 +39,99 @@ const ProjectText = ({ title, category }) => (
     >
       {category}
     </Typography>
+    {(repo || demo) && (
+      <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+        {repo && (
+          <Link
+            href={repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            sx={{ color: "#E1FF00" }}
+          >
+            Code<span className="visually-hidden"> for {title}</span>
+          </Link>
+        )}
+        {demo && (
+          <Link
+            href={demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            color="inherit"
+            sx={{ color: "#E1FF00" }}
+          >
+            Live<span className="visually-hidden"> demo of {title}</span>
+          </Link>
+        )}
+      </Box>
+    )}
   </Grid>
 );
 
-const ProjectMedia = ({ media, alt }) => (
-  <Grid item xs={12} sm={6} md={4}>
-    <video
-      src={`${media}.mp4`}
-      poster={`${media}.webp`}
-      aria-label={alt}
-      width="100%"
-      height="auto"
-      style={{ display: "block" }}
-      autoPlay
-      loop
-      muted
-      playsInline
-      preload="none"
-    />
-  </Grid>
-);
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const ProjectMedia = ({ media, alt, title }) => {
+  const videoRef = useRef(null);
+  const [playing, setPlaying] = useState(() => !prefersReducedMotion());
+
+  const toggle = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) video.play();
+    else video.pause();
+  };
+
+  return (
+    <Grid item xs={12} sm={6} md={4} sx={{ position: "relative" }}>
+      <video
+        ref={videoRef}
+        src={`${media}.mp4`}
+        poster={`${media}.webp`}
+        aria-label={alt}
+        width="100%"
+        height="auto"
+        style={{ display: "block" }}
+        autoPlay={playing}
+        loop
+        muted
+        playsInline
+        preload="none"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+      />
+      <IconButton
+        onClick={toggle}
+        aria-label={`${playing ? "Pause" : "Play"} ${title} preview`}
+        size="small"
+        sx={{
+          position: "absolute",
+          right: 8,
+          bottom: 8,
+          color: "#fff",
+          backgroundColor: "rgba(0,0,0,0.6)",
+          "&:hover, &:focus-visible": { backgroundColor: "rgba(0,0,0,0.85)" },
+        }}
+      >
+        {playing ? (
+          <PauseIcon fontSize="small" />
+        ) : (
+          <PlayArrowIcon fontSize="small" />
+        )}
+      </IconButton>
+    </Grid>
+  );
+};
 
 const Spacer = () => (
-  <Grid item xs={12} sm={6} md={4} sx={{ display: { xs: "none", md: "block" } }} />
+  <Grid
+    item
+    xs={12}
+    sm={6}
+    md={4}
+    sx={{ display: { xs: "none", md: "block" } }}
+  />
 );
 
 // Layout pattern per row: text | media | spacer, media | text | spacer,

@@ -1,8 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { SOCIAL_LINKS, TAGS } from "./data/content";
+import { CONTACT_EMAIL, CV_URL, SOCIAL_LINKS, TAGS } from "./data/content";
 import useColorTransition from "./hooks/useColorTransition";
+
+const CONTACT_LINKS = [
+  CONTACT_EMAIL && { label: "Email", href: `mailto:${CONTACT_EMAIL}` },
+  CV_URL && { label: "CV", href: CV_URL },
+  ...SOCIAL_LINKS,
+].filter(Boolean);
 
 export default function Footer() {
   const color = useColorTransition();
@@ -14,7 +20,9 @@ export default function Footer() {
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         justifyContent: "end",
-        height: "100vh",
+        minHeight: "100vh",
+        px: { xs: "4vw", md: 0 },
+        boxSizing: "border-box",
       }}
     >
       <Box
@@ -116,18 +124,23 @@ export default function Footer() {
               // color: "#FFFFFF",
             }}
           >
-            {SOCIAL_LINKS.map(({ label, href }) => (
-              <Typography key={label} color={color} variant="h6">
-                <a
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ color: "inherit", textDecoration: "none" }}
-                >
-                  {label.toUpperCase()}
-                </a>
-              </Typography>
-            ))}
+            {CONTACT_LINKS.map(({ label, href }) => {
+              const external = href.startsWith("http");
+              return (
+                <Typography key={label} color={color} variant="h6">
+                  <a
+                    href={href}
+                    {...(external && {
+                      target: "_blank",
+                      rel: "noopener noreferrer",
+                    })}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    {label.toUpperCase()}
+                  </a>
+                </Typography>
+              );
+            })}
           </Box>
         </Box>
       </Box>
