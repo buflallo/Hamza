@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 
@@ -32,7 +33,7 @@ export default function About() {
     renderer.domElement.setAttribute("role", "img");
     renderer.domElement.setAttribute(
       "aria-label",
-      "Rotating 3D sculpture of David"
+      "Rotating 3D sculpture of David",
     );
     container.appendChild(renderer.domElement);
 
@@ -71,8 +72,8 @@ export default function About() {
       if (loadStarted) return;
       loadStarted = true;
       setIsLoading(true);
-      new GLTFLoader().load(
-        "david/scene.gltf",
+      new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(
+        "david/scene.glb",
         (gltf) => {
           if (disposed) return;
           gltf.scene.traverse((node) => {
@@ -93,7 +94,7 @@ export default function About() {
         (error) => {
           console.error("Failed to load 3D model", error);
           if (!disposed) setIsLoading(false);
-        }
+        },
       );
     };
 
@@ -106,7 +107,7 @@ export default function About() {
           if (!frame) frame = requestAnimationFrame(render);
         }
       },
-      { rootMargin: "200px" }
+      { rootMargin: "200px" },
     );
     observer.observe(container);
 
@@ -177,11 +178,11 @@ export default function About() {
         >
           As a full stack developer at 1337 Coding School, I'm passionate about
           crafting user-centric websites. With a degree in computer science and
-          expertise in React, Nest, Laravel and Vue.js, I've led projects like dynamic
-          multilingual platforms for Sté IQRAE Négoce and responsive e-commerce
-          sites for Royale Maroc d'Agriculture. Now seeking internship
-          opportunities to expand my skills and contribute to innovative
-          projects.
+          expertise in React, Nest, Laravel and Vue.js, I've led projects like
+          dynamic multilingual platforms for Sté IQRAE Négoce and responsive
+          e-commerce sites for Royale Maroc d'Agriculture. Now seeking
+          internship opportunities to expand my skills and contribute to
+          innovative projects.
         </Typography>
       </Box>
       <Box

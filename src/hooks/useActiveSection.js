@@ -12,7 +12,7 @@ export default function useActiveSection(ids) {
         const current = ids.find((id) => seen.get(id));
         setActive(current ?? null);
       },
-      { rootMargin: "-45% 0px -50% 0px" }
+      { rootMargin: "-45% 0px -50% 0px" },
     );
     const attach = () => {
       ids.forEach((id) => {

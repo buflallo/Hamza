@@ -1,6 +1,5 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import SvgIcon from "@mui/material/SvgIcon";
@@ -8,6 +7,7 @@ import CardHeader from "@mui/material/CardHeader";
 import { styled } from "@mui/system";
 import { Box } from "@mui/system";
 import Title from "./Title";
+import { QUOTE, SKILLS } from "./data/content";
 
 const NestjsIcon = (props) => (
   <svg {...props}>
@@ -52,7 +52,7 @@ const StyledDiv = styled("div")({
     display: "block",
     marginLeft: "-30px",
     fontWeight: "normal",
-    fontSize: "inherit"
+    fontSize: "inherit",
     // Add other styles here
   },
 });
@@ -95,13 +95,21 @@ const Skill = (props) => {
     <Card
       sx={{
         width: "fit-content",
+        maxWidth: "100%",
         border: "2px solid black",
       }}
     >
-      <CardContent sx={{ maxWidth: {xs:"max-content", sm: "min-content", md: "100%"}, width: "fit-content", padding: "24px 30px" }}>
+      <CardContent
+        sx={{
+          maxWidth: { xs: "100%", sm: "min-content", md: "100%" },
+          width: "fit-content",
+          padding: "24px 30px",
+        }}
+      >
         <CardHeader
-          sx={{  width: "fit-content", padding: "0", marginBottom: "10px" }}
-          avatar={<SvgIcon
+          sx={{ width: "fit-content", padding: "0", marginBottom: "10px" }}
+          avatar={
+            <SvgIcon
               sx={{
                 width: { xs: "42px", md: "4vw" },
                 height: { xs: "42px", md: "4vw" },
@@ -114,30 +122,35 @@ const Skill = (props) => {
           }
           title={
             <Typography
-            fontSize={{ xs: "26px", sm: "32px", md:"2vw" }}
-            variant="h5"
+              fontSize={{ xs: "26px", sm: "32px", md: "2vw" }}
+              variant="h5"
               sx={{
                 zIndex: "1",
                 textTransform: "capitalize",
                 fontWeight: "bold",
               }}
-              width="min-content"
+              width={{ xs: "auto", sm: "min-content" }}
               color="text.secondary"
               gutterBottom
             >
               <SpanSouline bgColor={props.subLineColor}>
                 {props.title.split(" ")[0]}
-              </SpanSouline>
-              {props.title.split(" ")[1]}
+              </SpanSouline>{" "}
+              {props.title.split(" ").slice(1).join(" ")}
             </Typography>
           }
         />
         <DivWithLeftBar>
-          <StyledDiv sx={{fontSize:{xs: "1rem", lg:"calc(1rem + 0.5vw)"}}}>
-            <Typography 
-            fontSize="inherit"
-            
-            variant="h6">{props.description}</Typography>
+          <StyledDiv
+            sx={{ fontSize: { xs: "1rem", lg: "calc(1rem + 0.5vw)" } }}
+          >
+            <Typography
+              fontSize="inherit"
+
+              variant="h6"
+            >
+              {props.description}
+            </Typography>
           </StyledDiv>
         </DivWithLeftBar>
       </CardContent>
@@ -145,12 +158,18 @@ const Skill = (props) => {
   );
 };
 
+const ICONS = {
+  software: SoftwareIcon,
+  frontend: ReactIcon,
+  backend: NestjsIcon,
+};
+
 export default function Skills() {
   return (
     <Box
       component="section"
       id="Skills"
-      aria-label="Skills"
+      aria-labelledby="skills-title"
       sx={{
         pt: "12vh",
         mt: "50px",
@@ -162,7 +181,7 @@ export default function Skills() {
         justifyContent: "space-around",
       }}
     >
-          <Title title="Skills"></Title>
+      <Title title="Skills" id="skills-title" />
       <Box
         sx={{
           display: "flex",
@@ -171,64 +190,46 @@ export default function Skills() {
           flexWrap: { xs: "wrap", md: "nowrap" },
         }}
       >
-        <Skill
-          subLineColor="#FFD100"
-          icon={SoftwareIcon}
-          maxWidth="25vw"
-          viewBox="0 -3 46 46"
-          title="Software Development"
-          description="With a solid foundation in software development, I excel in languages like C, C++, and TypeScript. My expertise extends to implementing efficient design patterns to enhance performance and scalability, ensuring that each project I undertake operates seamlessly and effectively."
-        />
-        <Skill
-          subLineColor="#61DAFB"
-          maxWidth="25vw"
-          icon={ReactIcon}
-          viewBox="0 0 24 24"
-          title="Frontend Development"
-          description="Proficiency in crafting captivating user interfaces using technologies like React, Vue.js, HTML, and CSS. With a keen eye for design and usability, I leverage tools like Figma to create intuitive and visually appealing experiences that engage users effectively"
-        />
-        <Skill
-          subLineColor="#E0234E"
-          icon={NestjsIcon}
-          maxWidth="25vw"
-          viewBox="0 0 24 24"
-          title="Backend Development"
-          description="Crafting resilient server-side systems using frameworks like Nest.js and Laravel. Proficient in database management with MySQL and PostgreSQL, I excel in creating efficient data architectures. My expertise in server-side programming and API development ensures the creation of robust, scalable web solutions"
-        />
+        {SKILLS.map(({ id, title, color, viewBox, description }) => (
+          <Skill
+            key={id}
+            subLineColor={color}
+            icon={ICONS[id]}
+            viewBox={viewBox}
+            title={title}
+            description={description}
+          />
+        ))}
         <Card
+          component="figure"
           sx={{
             display: { xs: "flex", md: "none" },
             alignItems: "center",
             justifyContent: "center",
             maxWidth: 350,
+            m: 0,
             background: "transparent",
           }}
         >
           <CardContent
+            component="blockquote"
             sx={{
               borderLeft: "7px solid #b7f",
               padding: "0px 20px",
               margin: "25px 0 0 20px",
             }}
           >
-            <CardHeader
-              sx={{ padding: "0", marginBottom: "10px" }}
-              title={
-                <Typography
-                  variant="h5"
-                  sx={{
-                    textTransform: "capitalize",
-                    fontWeight: "bold",
-                  }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Sometimes the best way to solve a problem is to help others.
-                </Typography>
-              }
-            />
-            <Typography variant="body2" color="white">
-              - Uncle Iroh, 'Avatar: The Last Airbender'
+            <Typography
+              variant="h5"
+              component="p"
+              sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+              color="text.secondary"
+              gutterBottom
+            >
+              {QUOTE.text}
+            </Typography>
+            <Typography variant="body2" color="white" component="figcaption">
+              - {QUOTE.author}
             </Typography>
           </CardContent>
         </Card>

@@ -11,7 +11,10 @@ vi.mock("./About", () => ({ default: () => <section id="About" /> }));
 test("navigation links to every section", () => {
   render(<ResponsiveAppBar />);
   NAV_SECTIONS.forEach((name) => {
-    expect(screen.getByRole("tab", { name })).toHaveAttribute("href", `#${name}`);
+    expect(screen.getByRole("tab", { name })).toHaveAttribute(
+      "href",
+      `#${name}`,
+    );
   });
 });
 

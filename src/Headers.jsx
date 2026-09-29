@@ -3,91 +3,66 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useColorTransition from "./hooks/useColorTransition";
 
+const ACCENT = "#2E05D1";
+
 const Headers = () => {
   const color = useColorTransition();
   return (
     <Box
+      component="header"
       sx={{
         display: "flex",
         flexDirection: "column",
         justifyContent: { xs: "end", md: "space-around" },
-        alignItems: "center", // center vertically
+        alignItems: "center",
         height: "fit-content",
         maxHeight: "1600px",
         pt: "16vh",
+        px: { xs: "4vw", md: 0 },
         width: "100%",
+        boxSizing: "border-box",
       }}
     >
       <Box
         sx={{
           alignSelf: "flex-start",
           width: "min-content",
-          height: "min-content",
           display: "flex",
           flexDirection: "column",
-          position: "relative",
-          justifyContent: "center",
         }}
       >
         <Typography
           variant="h3"
           component="h1"
-          color="#2E05D1"
-          fontSize={{ xs: "100px", md: "calc(1rem + 7vw + 1vh)" }}
-          sx={{ textTransform: "uppercase", 
-        }}
-        >
-          Software & Web Developer
-        </Typography>
-        <Typography
-          aria-hidden="true"
-          color={{ xs: "#1D1B1B", sm: "#FFFFFF"}}
-          variant="h3"
-          fontSize={{ xs: "100px", md: "calc(1rem + 7vw + 1vh)" }}
-          sx={{ textTransform: "uppercase",
-            position: "absolute",
-          top: "4px",
-          left: "4px" }}
+          color={{ xs: "#1D1B1B", sm: "#FFFFFF" }}
+          fontSize={{
+            xs: "clamp(56px, 22vw, 100px)",
+            md: "calc(1rem + 7vw + 1vh)",
+          }}
+          sx={{
+            textTransform: "uppercase",
+            textShadow: `-4px -4px 0 ${ACCENT}`,
+          }}
         >
           Software & Web Developer
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          alignSelf: "flex-end",
-          width: `fit-content`,
-          display: "flex",
-          justifyContent: "center",
-          height: "min-content",
-          alignItems: "center",
-          position: "relative",
-        }}
-      >
+      <Box sx={{ alignSelf: "flex-end", width: "fit-content" }}>
         <Typography
-          color="#2E05D1"
+          // The painted background starts at "sm": use white there, the scroll colour on the light mobile gradient.
+          color={{ xs: color, sm: "#FFFFFF" }}
           sx={{
             maxWidth: { xs: "400px", sm: "60vw" },
             textTransform: "uppercase",
+            textShadow: `0 -4px 0 ${ACCENT}`,
           }}
-          fontSize={{ xs: "2rem", md: "calc((1rem + 7vw + 1vh)/(1.618 * 1.5))" }}
-          variant="h4"
-        >
-          I am a seasoned developer based in Morocco, passionate about crafting
-          digital solutions that merge simplicity with functionality. I LOVE
-          PIZZA AND ART.
-        </Typography>
-        <Typography
-          aria-hidden="true"
-          color={color}
-          sx={{
-            maxWidth: { xs: "400px", sm: "60vw" },
-            textTransform: "uppercase",
-            position: "absolute",
-            top: "4px",
+          fontSize={{
+            xs: "clamp(1.25rem, 6vw, 2rem)",
+            md: "calc((1rem + 7vw + 1vh)/(1.618 * 1.5))",
           }}
-          fontSize={{ xs: "2rem", md: "calc((1rem + 7vw + 1vh)/(1.618 * 1.5))" }}
           variant="h4"
+          component="p"
         >
           I am a seasoned developer based in Morocco, passionate about crafting
           digital solutions that merge simplicity with functionality. I LOVE

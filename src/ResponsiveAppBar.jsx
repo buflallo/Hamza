@@ -7,27 +7,26 @@ import Container from "@mui/material/Container";
 import { StyledTab, StyledTabs } from "./Menu";
 import useActiveSection from "./hooks/useActiveSection";
 import { NAV_SECTIONS } from "./data/content";
-import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-
-
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 export default function ResponsiveAppBar() {
   const active = useActiveSection(NAV_SECTIONS);
   const value = active ? NAV_SECTIONS.indexOf(active) : false;
   const theme = useTheme();
-  const sm = useMediaQuery(theme.breakpoints.down('sm'));
+  const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <AppBar
       sx={{
         boxShadow: "inset 0px -5px 3px rgba(0,0,0,0.1)",
-        backgroundColor: "#ffffff42",
+        backgroundColor: "rgba(20, 18, 18, 0.72)",
+        color: "#FFFFFF",
         backdropFilter: "blur(10px)",
       }}
       component="nav"
       position="fixed"
-      color="transparent"
+      color="inherit"
     >
       <Container maxWidth="none">
         <Toolbar disableGutters>
@@ -47,7 +46,7 @@ export default function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            {sm ?"HL" : "HAMZA LACHKAR"}
+            {sm ? "HL" : "HAMZA LACHKAR"}
           </Typography>
           <Box
             sx={{
@@ -56,17 +55,12 @@ export default function ResponsiveAppBar() {
               display: "flex",
             }}
           >
-            <StyledTabs
-              value={value}
-              aria-label="Page sections"
-              centered
-            >
+            <StyledTabs value={value} aria-label="Page sections" centered>
               {NAV_SECTIONS.map((page) => (
                 <StyledTab key={page} label={page} />
               ))}
             </StyledTabs>
           </Box>
-
         </Toolbar>
       </Container>
     </AppBar>
