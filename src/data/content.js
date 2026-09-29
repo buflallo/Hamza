@@ -25,24 +25,28 @@ export const PROJECTS = [
     title: "Minishell",
     category: "Software Development",
     media: "projects/minishell",
+    ratio: "564 / 468",
     alt: "Terminal session running the Minishell shell written in C",
   },
   {
     title: "Webserv",
     category: "Server Development",
     media: "projects/webserv",
+    ratio: "1917 / 1025",
     alt: "Webserv HTTP server handling requests",
   },
   {
     title: "Cube3d",
     category: "Game Development",
     media: "projects/cub3d",
+    ratio: "640 / 448",
     alt: "Cube3d raycasting game demo",
   },
   {
     title: "Transcendence",
     category: "Web Development",
     media: "projects/trandandan",
+    ratio: "600 / 330",
     alt: "Transcendence real-time multiplayer Pong web app",
   },
 ];

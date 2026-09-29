@@ -82,3 +82,156 @@ html {
   white-space: nowrap;
   border: 0;
 }
+
+/* ---- Alive motion: content develops into reserved space ---- */
+.develop {
+  position: relative;
+  overflow: hidden;
+  background: #2a2727;
+}
+.develop::before {
+  /* skeleton: a scan of light that keeps moving until the media is ready */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(225, 255, 0, 0.2) 50%,
+    transparent 70%
+  );
+  background-size: 320px 100%;
+  background-repeat: repeat-x;
+  animation: scan 2.2s linear infinite;
+  pointer-events: none;
+}
+.develop > .develop-media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+.develop.is-in > .develop-media {
+  animation: develop 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.develop.is-in::before {
+  animation-iteration-count: 2;
+  opacity: 0;
+  transition: opacity 0.6s 1.2s;
+}
+
+.rise {
+  opacity: 0;
+  transform: translateY(26px) skewX(-6deg);
+}
+.rise.is-in {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+@keyframes scan {
+  from {
+    background-position: -320px 0;
+  }
+  to {
+    background-position: 320px 0;
+  }
+}
+@keyframes develop {
+  0% {
+    opacity: 0;
+    filter: blur(16px) contrast(2.2) brightness(0.35);
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  }
+  35% {
+    opacity: 1;
+    filter: blur(9px) contrast(1.8) brightness(0.5);
+    clip-path: polygon(0 0, 62% 0, 46% 100%, 0 100%);
+  }
+  70% {
+    filter: blur(3px) contrast(1.4) brightness(0.8);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+  100% {
+    opacity: 1;
+    filter: none;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---- Hero: the blue plate slips like a badly registered print ---- */
+.misreg {
+  animation: misreg 5.5s steps(1, end) infinite;
+}
+.misreg.soft {
+  animation-name: misreg-soft;
+  animation-duration: 7s;
+}
+header:hover .misreg {
+  animation-duration: 0.9s;
+}
+@keyframes misreg {
+  0% {
+    text-shadow: -4px -4px 0 #2e05d1;
+  }
+  18% {
+    text-shadow: -7px -3px 0 #2e05d1;
+  }
+  22% {
+    text-shadow: -3px -6px 0 #2e05d1;
+  }
+  47% {
+    text-shadow: -5px -5px 0 #2e05d1;
+  }
+  51% {
+    text-shadow: -9px -2px 0 #2e05d1;
+  }
+  56% {
+    text-shadow: -4px -4px 0 #2e05d1;
+  }
+  81% {
+    text-shadow: -6px -7px 0 #2e05d1;
+  }
+  100% {
+    text-shadow: -4px -4px 0 #2e05d1;
+  }
+}
+@keyframes misreg-soft {
+  0% {
+    text-shadow: 0 -4px 0 #2e05d1;
+  }
+  33% {
+    text-shadow: 2px -6px 0 #2e05d1;
+  }
+  38% {
+    text-shadow: -2px -3px 0 #2e05d1;
+  }
+  70% {
+    text-shadow: 1px -5px 0 #2e05d1;
+  }
+  100% {
+    text-shadow: 0 -4px 0 #2e05d1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .develop::before,
+  .misreg {
+    animation: none;
+  }
+  .develop > .develop-media,
+  .rise {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    animation: none;
+  }
+}

@@ -39,6 +39,7 @@ const Headers = () => {
             xs: "clamp(56px, 22vw, 100px)",
             md: "calc(1rem + 7vw + 1vh)",
           }}
+          className="misreg"
           sx={{
             textTransform: "uppercase",
             textShadow: `-4px -4px 0 ${ACCENT}`,
@@ -52,6 +53,7 @@ const Headers = () => {
         <Typography
           // The painted background starts at "sm": use white there, the scroll colour on the light mobile gradient.
           color={{ xs: color, sm: "#FFFFFF" }}
+          className="misreg soft"
           sx={{
             maxWidth: { xs: "400px", sm: "60vw" },
             textTransform: "uppercase",

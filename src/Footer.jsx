@@ -36,56 +36,65 @@ export default function Footer() {
           color: "#FFFFFF",
         }}
       >
-        <Typography
-          sx={{ lineHeight: "1" }}
-          color={color}
-          fontSize={{ xs: "100px", md: "calc(4rem + 12vw)" }}
-          variant="h3"
-        >
-          Let's
-        </Typography>
-        <Typography
-          sx={{ lineHeight: "1" }}
-          color={color}
-          fontSize={{ xs: "100px", md: "12vw" }}
-          variant="h3"
-        >
-          connect
-        </Typography>
+        <Box component="h2" sx={{ m: 0, font: "inherit" }}>
+          <Typography
+            component="span"
+            sx={{ lineHeight: "1", display: "block" }}
+            color={color}
+            fontSize={{ xs: "100px", md: "calc(4rem + 12vw)" }}
+            variant="h3"
+          >
+            Let's
+          </Typography>
+          <Typography
+            component="span"
+            sx={{ lineHeight: "1", display: "block" }}
+            color={color}
+            fontSize={{ xs: "100px", md: "12vw" }}
+            variant="h3"
+          >
+            connect
+          </Typography>
+        </Box>
       </Box>
       <Box
-        component="ul"
-        aria-label="Areas of expertise"
         sx={{
-          m: 0,
-          p: 0,
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "start",
           alignSelf: { xs: "start", md: "end" },
-          flexWrap: "wrap",
-          gap: "1vw",
           width: { xs: "100%", md: "80%" },
         }}
       >
-        {TAGS.map((tag, i) => (
-          <Box
-            key={tag}
-            component="li"
-            sx={{
-              listStyle: "none",
-              border: "2px solid black",
-              borderRadius: "50px",
-              padding: "5px",
-              height: "min-content",
-              ml: i === 0 ? { xs: "0", md: "-6vw" } : 0,
-            }}
-          >
-            <Typography color={color} variant="h6" component="span">
-              {tag}
-            </Typography>
-          </Box>
-        ))}
+        <Box
+          component="ul"
+          aria-label="Areas of expertise"
+          sx={{
+            m: 0,
+            p: 0,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "start",
+            flexWrap: "wrap",
+            gap: "1vw",
+          }}
+        >
+          {TAGS.map((tag, i) => (
+            <Box
+              key={tag}
+              component="li"
+              sx={{
+                listStyle: "none",
+                border: "2px solid black",
+                borderRadius: "50px",
+                padding: "5px",
+                height: "min-content",
+                ml: i === 0 ? { xs: "0", md: "-6vw" } : 0,
+              }}
+            >
+              <Typography color={color} variant="h6" component="span">
+                {tag}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
         <Box
           sx={{
             width: "100%",
@@ -107,7 +116,7 @@ export default function Footer() {
               // color: "#FFFFFF",
             }}
           >
-            <Typography color={color} variant="h6">
+            <Typography color={color} variant="h6" component="p">
               HAVE A PROJECT IN MIND?
             </Typography>
             {/* <Button></Button> */}
@@ -127,7 +136,12 @@ export default function Footer() {
             {CONTACT_LINKS.map(({ label, href }) => {
               const external = href.startsWith("http");
               return (
-                <Typography key={label} color={color} variant="h6">
+                <Typography
+                  key={label}
+                  color={color}
+                  variant="h6"
+                  component="p"
+                >
                   <a
                     href={href}
                     {...(external && {
