@@ -1,102 +1,72 @@
+/* Only the weights actually used by the theme are shipped, as woff2. */
 @font-face {
-  font-family: 'HelveticaNeue';
-  src: url('/fonts/HelveticaNeueBlack.otf') format('opentype');
-  font-weight: 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HelveticaNeue';
-  src: url('/fonts/HelveticaNeueHeavy.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'HelveticaNeue';
-  src: url('/fonts/HelveticaNeueMedium.otf') format('opentype');
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueMedium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaNeue';
-  src: url('/fonts/HelveticaNeueLight.otf') format('opentype');
+  font-family: "HelveticaNeue";
+  src: url("/fonts/HelveticaNeueLight.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'HelveticaNeue';
-  src: url('/fonts/HelveticaNeueThin.otf') format('opentype');
-  font-weight: 100;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'SpaceMono';
-  src: url('/fonts/SpaceMono-Bold.ttf') format('truetype');
-  font-weight: bold;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'SpaceMono';
-  src: url('/fonts/SpaceMono-Regular.ttf') format('truetype');
+  font-family: "Space Mono";
+  src: url("/fonts/SpaceMono-Regular.woff2") format("woff2");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'DeliriumNcv';
-  src: url('/fonts/DeliriumNcv.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-/* PPFuji-Bold.otf */
-@font-face {
-  font-family: 'PPFuji';
-  src: url('/fonts/PPFuji-Bold.otf') format('opentype');
+  font-family: "Space Mono";
+  src: url("/fonts/SpaceMono-Bold.woff2") format("woff2");
   font-weight: bold;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'PPFuji';
-  src: url('/fonts/PPFuji-Light.otf') format('opentype');
+  font-family: "DeliriumNcv";
+  src: url("/fonts/DeliriumNcv.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PPFuji";
+  src: url("/fonts/PPFuji-Bold.woff2") format("woff2");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PPFuji";
+  src: url("/fonts/PPFuji-Light.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
-.App {
-  text-align: center;
+html {
+  scroll-behavior: smooth;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-.heart {
-  color: #ff0000;
-}
-
-.small {
-  font-size: 0.75rem;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

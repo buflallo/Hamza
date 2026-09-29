@@ -1,68 +1,36 @@
-import { useEffect } from 'react';
-
-
+import { useCallback } from "react";
+import useScrollFrame from "./useScrollFrame";
 
 const useBackgroundTransition = () => {
-  useEffect(() => {
-    const setBackground = () => {
-      if (!window) return;
-      const scrollPosition = window.scrollY;
-      const scrollBottom = document.body.scrollHeight - window.innerHeight;
-      const transitionBottom = (scrollBottom - scrollPosition) / window.innerHeight;
-      
-      let transitionProgress = Math.min(Math.max(0, scrollPosition / window.innerHeight), 1);
-      
-      let direction = "to right bottom";
-      if (transitionBottom <= 1)
-      {
-        direction = "to top";
-        transitionProgress = transitionBottom;
-      }
+  const setBackground = useCallback(() => {
+    const scrollPosition = window.scrollY;
+    const scrollBottom = document.body.scrollHeight - window.innerHeight;
+    const transitionBottom = (scrollBottom - scrollPosition) / window.innerHeight;
 
-      // const colorOpacity = 0.4 + transitionProgress * 0.6;
-      // const colorStop = `${30 - transitionProgress * 30}%`;
-      // let clor2Stop = `${10 - transitionProgress * 10}%`;
-      // const pageHeight = document.body.scrollHeight;
-      let colorStop = 0;
-      let clor2Stop = 0;
-      if (scrollPosition && transitionBottom <= 1)
-        {
-          colorStop = `${(1 - transitionBottom) * (transitionBottom <= 1 ? 50 : 12)}%`;
-          clor2Stop = `${(1 - transitionBottom) * (transitionBottom <= 1 ? 30 : 12) }%`;
-        }
-      // Set background color with dynamic opacity
-      const gradientColor = `rgba(29, 27, 27, ${transitionProgress}) ${colorStop}`;
-      const gradient = `linear-gradient(${direction}, rgb(255, 255, 0) ${clor2Stop}, ${gradientColor})`;
+    let progress = Math.min(Math.max(0, scrollPosition / window.innerHeight), 1);
+    let direction = "to right bottom";
+    if (transitionBottom <= 1) {
+      direction = "to top";
+      progress = transitionBottom;
+    }
 
-      // Set background imagecontain
-      // the background image will only be visible when the user scrolls to the top or the bottom of the page
+    let colorStop = 0;
+    let color2Stop = 0;
+    if (scrollPosition && transitionBottom <= 1) {
+      colorStop = `${(1 - transitionBottom) * 50}%`;
+      color2Stop = `${(1 - transitionBottom) * 30}%`;
+    }
 
-      // const backgroundImage = scrollBottom <= 0 ? 'url("background.jpg")' : 'none';
-      const backgroundImage = 'url("background2.jpg")';
-
-      // Combine gradient and background image
-      let background = `${gradient}, ${backgroundImage}`;
-      if (window.outerWidth < 600)
-        background = `${gradient}`;
-      document.body.style.background = background;
-      document.body.style.backgroundSize = 'cover';
-      document.body.style.backgroundPositionX = 'center';
-      document.body.style.backgroundAttachment = 'fixed';
-      document.body.style.transition = 'background 0.5s ease';
-
-    };
-
-    const handleScroll = () => {
-      setBackground();
-    };
-
-    setBackground(); // Set initial background
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    const gradient = `linear-gradient(${direction}, rgb(255, 255, 0) ${color2Stop}, rgba(29, 27, 27, ${progress}) ${colorStop})`;
+    const isNarrow = window.innerWidth < 600;
+    const style = document.body.style;
+    style.background = isNarrow ? gradient : `${gradient}, url("background2.jpg")`;
+    style.backgroundSize = "cover";
+    style.backgroundPositionX = "center";
+    style.backgroundAttachment = "fixed";
   }, []);
+
+  useScrollFrame(setBackground);
 };
 
 export default useBackgroundTransition;
