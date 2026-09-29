@@ -17,7 +17,7 @@ export const StyledTabs = styled((props) => (
   "& .MuiTabs-indicatorSpan": {
     maxWidth: 40,
     width: "100%",
-    backgroundColor: "#E1FF00",
+    backgroundColor: "#2E05D1",
   },
 });
 
@@ -29,12 +29,12 @@ export const StyledTab = styled((props) => (
   fontWeight: theme.typography.fontWeightRegular,
   fontSize: "calc(1em + 0.5vw)",
   marginRight: theme.spacing(1),
-  color: "rgba(255, 255, 255, 0.8)",
+  color: "rgba(29, 27, 27, 0.75)",
   "&.Mui-selected": {
-    color: "#FFFFFF",
+    color: "#1D1B1B",
   },
   "&:focus-visible": {
-    outline: "2px solid #E1FF00",
+    outline: "2px solid #2E05D1",
     outlineOffset: "-2px",
   },
   "&.Mui-focusVisible": {
