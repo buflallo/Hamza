@@ -31,10 +31,12 @@ export default function Title({ title, id }) {
       <Box
         ref={starRef}
         sx={{
-          width: { xs: "60px", md: "3vw" },
-          height: { xs: "60px", md: "3vw" },
+          width: { xs: "56px", md: "6vw" },
+          height: { xs: "56px", md: "6vw" },
           ml: "10px",
-          mr: "10px",
+          mr: { xs: "10px", md: "1vw" },
+          alignSelf: "center",
+          flexShrink: 0,
           willChange: "transform",
         }}
       >
@@ -43,11 +45,15 @@ export default function Title({ title, id }) {
       <Typography
         id={id}
         color="white"
-        sx={{ textAlign: "left" }}
-        variant="h5"
+        variant="h3"
         component="h2"
-        fontSize={{ xs: "2rem", md: "calc(6vw/(1.618*1.5))" }}
-        alignContent="center"
+        className="misreg"
+        sx={{
+          textAlign: "left",
+          textTransform: "uppercase",
+          lineHeight: 1,
+          fontSize: { xs: "64px", md: "8.5vw" },
+        }}
       >
         {title}
       </Typography>
