@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Look up hero</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face { font-family: "DeliriumNcv"; src: url("/_blob/b61ac729703d3bd67294c90868667b44") format("woff2"); font-display: swap; }
+@font-face { font-family: "PPFuji"; src: url("/_blob/771b904049c6e19fc0e9cdf8a7ffbab7") format("woff2"); font-weight: 700; font-display: swap; }
+body { margin: 0; background: #1D1B1B; }
+.d { font-family: 'DeliriumNcv', sans-serif; font-weight: 400; text-transform: uppercase; margin: 0; }
+.p { font-family: 'PPFuji', sans-serif; font-weight: 700; text-transform: uppercase; margin: 0; }
+.a { position: absolute; }
+.plate { animation: slip 6s steps(1,end) infinite; }
+.lbl { position: absolute; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+@keyframes slip { 0% { text-shadow: -5px -5px 0 #2E05D1; } 30% { text-shadow: -10px -4px 0 #2E05D1; } 34% { text-shadow: -4px -9px 0 #2E05D1; } 71% { text-shadow: -7px -7px 0 #2E05D1; } 100% { text-shadow: -5px -5px 0 #2E05D1; } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.layer { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") center/cover; }
+
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; position: relative; overflow: hidden; background: #1D1B1B">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.18 1"/><feFuncG type="table" tableValues="0.02 1"/><feFuncB type="table" tableValues="0.82 0"/></feComponentTransfer></filter><filter id="ghost" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.18"/><feFuncG type="table" tableValues="0.1 0.02"/><feFuncB type="table" tableValues="0.1 0.82"/></feComponentTransfer></filter></svg>
+<div class="layer" aria-hidden="true"></div>
+<div class="a" style="inset:0;background:radial-gradient(ellipse at 62% 48%, rgba(255,255,0,.0) 30%, rgba(46,5,209,.62) 100%)" aria-hidden="true"></div>
+<div class="a" style="left:560px;top:120px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle, rgba(255,240,140,.85), rgba(255,255,0,0) 68%);mix-blend-mode:screen" aria-hidden="true"></div>
+<h1 class="d plate a" style="left:44px;top:30px;font-size:360px;line-height:1;color:#fff;white-space:nowrap">Software</h1>
+<img class="a" src="/_blob/33dcfee73181e7317d0e487cd76fec5f" alt="Sculpted head crowned with vines" style="left:640px;top:120px;width:480px;height:603px">
+<h1 class="d plate a" style="left:56px;top:560px;font-size:210px;line-height:1;color:#fff;white-space:nowrap">&amp; web developer</h1>
+<p class="p a" style="left:72px;top:350px;width:400px;font-size:23px;line-height:1.28;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.45)">I am a seasoned developer based in Morocco, passionate about crafting digital solutions that merge simplicity with functionality. I love pizza and art.</p>
+<img class="a" src="/_blob/4f2152d965a006a9edb6cc937b7d12b0" alt="" style="left:1130px;top:90px;width:96px;transform:rotate(14deg)">
+<div class="lbl" style="left:72px;bottom:28px;color:#E1FF00;text-shadow:0 1px 6px rgba(0,0,0,.5)">Look up · one painting, one figure, the headline passes behind him and in front</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

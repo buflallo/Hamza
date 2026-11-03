@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Look up footer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face { font-family: "DeliriumNcv"; src: url("/_blob/b61ac729703d3bd67294c90868667b44") format("woff2"); font-display: swap; }
+@font-face { font-family: "PPFuji"; src: url("/_blob/771b904049c6e19fc0e9cdf8a7ffbab7") format("woff2"); font-weight: 700; font-display: swap; }
+body { margin: 0; background: #FFFF00; }
+.d { font-family: 'DeliriumNcv', sans-serif; font-weight: 400; text-transform: uppercase; margin: 0; }
+.p { font-family: 'PPFuji', sans-serif; font-weight: 700; text-transform: uppercase; margin: 0; }
+.a { position: absolute; }
+.plate { animation: slip 6s steps(1,end) infinite; }
+.lbl { position: absolute; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+@keyframes slip { 0% { text-shadow: -5px -5px 0 #2E05D1; } 30% { text-shadow: -10px -4px 0 #2E05D1; } 34% { text-shadow: -4px -9px 0 #2E05D1; } 71% { text-shadow: -7px -7px 0 #2E05D1; } 100% { text-shadow: -5px -5px 0 #2E05D1; } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.layer { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") center/cover; }
+.duo { filter: contrast(1.3) url(#duo); -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 58%); mask-image: linear-gradient(180deg, #000 0%, transparent 58%); }
+.pill { display: inline-block; border: 2px solid #1D1B1B; border-radius: 50px; padding: 5px 14px; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 21px; text-transform: uppercase; color: #1D1B1B; }
+.link { font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 26px; text-transform: uppercase; color: #1D1B1B; text-decoration: none; }
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; position: relative; overflow: hidden; background: #FFFF00">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.18 1"/><feFuncG type="table" tableValues="0.02 1"/><feFuncB type="table" tableValues="0.82 0"/></feComponentTransfer></filter><filter id="ghost" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.18"/><feFuncG type="table" tableValues="0.1 0.02"/><feFuncB type="table" tableValues="0.1 0.82"/></feComponentTransfer></filter></svg>
+<div class="layer duo" aria-hidden="true"></div>
+<h2 class="d plate a" style="left:40px;top:210px;font-size:236px;line-height:1;color:#1D1B1B;white-space:nowrap">Let's connect</h2>
+<img class="a" src="/_blob/4f2152d965a006a9edb6cc937b7d12b0" alt="" style="left:1090px;top:90px;width:140px;transform:rotate(-12deg);animation:bob 5s ease-in-out infinite">
+<div class="a" style="left:72px;top:480px;width:760px;display:flex;flex-wrap:wrap;gap:12px"><span class="pill">Web Development</span><span class="pill">Software Engineering</span><span class="pill">IT Solutions</span><span class="pill">UI/UX Design</span><span class="pill">Mathematics</span><span class="pill">Cyber Security</span></div>
+<div class="a" style="left:72px;top:620px;width:1136px;border-top:3px solid #1D1B1B;padding-top:14px;display:flex;gap:48px;align-items:baseline"><span class="p" style="font-size:26px;color:#1D1B1B">Have a project in mind?</span><a class="link" href="https://www.instagram.com/hmazi96/">Instagram ↗</a><a class="link" href="https://www.linkedin.com/in/hamza-lachkar/">LinkedIn ↗</a><a class="link" href="https://github.com/buflallo/">GitHub ↗</a></div>
+<div class="lbl" style="left:72px;bottom:28px;color:#1D1B1B;text-shadow:0 1px 6px rgba(0,0,0,.5)">Look up · the print dissolves into plain yellow, the star keeps floating</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
