@@ -7,6 +7,9 @@ import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.j
 import { useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
 
+// Height of the bust in scene units (the camera sits 1 unit away).
+const BUST_HEIGHT = 0.95;
+
 export default function About() {
   const refContainer = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +36,7 @@ export default function About() {
     renderer.domElement.setAttribute("role", "img");
     renderer.domElement.setAttribute(
       "aria-label",
-      "Rotating 3D sculpture of David",
+      "Rotating marble bust of Hamza",
     );
     container.appendChild(renderer.domElement);
 
@@ -110,14 +113,18 @@ export default function About() {
       loadStarted = true;
       setIsLoading(true);
       new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(
-        "david/scene.glb",
+        "bust/hamza.glb",
         (gltf) => {
           if (disposed) return;
           gltf.scene.traverse((node) => {
             if (node.isMesh) node.material = material;
           });
           object = gltf.scene;
-          object.scale.set(0.04, 0.04, 0.04);
+          // Fit any model to the same on-screen height, whatever its units.
+          const height = new THREE.Box3()
+            .setFromObject(object)
+            .getSize(new THREE.Vector3()).y;
+          object.scale.setScalar(BUST_HEIGHT / height);
           const center = new THREE.Box3()
             .setFromObject(object)
             .getCenter(new THREE.Vector3());
