@@ -1,0 +1,259 @@
+import React, { useEffect, useRef } from "react";
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
+
+const MODEL = "bust/hamza.glb";
+
+const clamp01 = (v) => Math.min(1, Math.max(0, v));
+const smooth = (t) => t * t * (3 - 2 * t);
+
+// How far the seam has opened (0 marble … 1 blueprint) for the About section's
+// box: it starts when the top is halfway up the viewport, sits near the middle
+// while you read, and finishes as the section leaves.
+export const seamFor = (top, height, viewport) =>
+  smooth(clamp01((viewport * 0.5 - top) / (height + viewport * 0.2)));
+
+const NOISE = `
+float h3(vec3 p){p=fract(p*0.3183099+.1);p*=17.0;return fract(p.x*p.y*p.z*(p.x+p.y+p.z));}
+float n3(vec3 x){vec3 i=floor(x);vec3 f=fract(x);f=f*f*(3.0-2.0*f);
+return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),
+mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}
+float fbm(vec3 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n3(p);p*=2.03;a*=.5;}return v;}
+`;
+
+// One material for the whole head: veined marble left of the seam, a cobalt
+// survey scan with lime contour lines right of it, and a yellow line on the cut.
+function bustMaterial(height) {
+  const uniforms = {
+    uSeam: { value: 0.5 },
+    uRes: { value: new THREE.Vector2(1, 1) },
+    uHeight: { value: height },
+    uDpr: { value: 1 },
+  };
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xefe9df,
+    roughness: 0.45,
+    metalness: 0,
+  });
+  material.onBeforeCompile = (shader) => {
+    Object.assign(shader.uniforms, uniforms);
+    shader.vertexShader = shader.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying vec3 vP;")
+      .replace(
+        "#include <begin_vertex>",
+        "#include <begin_vertex>\nvP = position;",
+      );
+    shader.fragmentShader = shader.fragmentShader
+      .replace(
+        "#include <common>",
+        `#include <common>
+varying vec3 vP;
+uniform float uSeam;
+uniform vec2 uRes;
+uniform float uHeight;
+uniform float uDpr;
+${NOISE}`,
+      )
+      .replace(
+        "#include <color_fragment>",
+        `#include <color_fragment>
+vec3 mp = vP / uHeight * 6.0;
+float mt = fbm(mp * 1.3);
+float vein = 1.0 - smoothstep(0.0, 0.12, abs(sin(mp.x * 1.7 + mp.y * 0.9 + mt * 7.0)));
+float fine = 1.0 - smoothstep(0.0, 0.035, abs(sin(mp.y * 3.1 - mp.z * 2.0 + fbm(mp * 2.7) * 9.0)));
+vec3 marble = mix(diffuseColor.rgb, vec3(0.55, 0.53, 0.56), vein * 0.55 + fine * 0.25);
+marble *= 0.93 + 0.07 * fbm(mp * 6.0);
+float seamX = uRes.x * (1.0 - uSeam);
+float blue = step(seamX, gl_FragCoord.x);
+diffuseColor.rgb = mix(marble, vec3(0.027, 0.0015, 0.64), blue);`,
+      )
+      .replace(
+        "#include <roughnessmap_fragment>",
+        "#include <roughnessmap_fragment>\nroughnessFactor = mix(roughnessFactor, 0.75, blue);",
+      )
+      .replace(
+        "#include <emissivemap_fragment>",
+        `#include <emissivemap_fragment>
+float yy = vP.y / uHeight * 70.0;
+float contour = 1.0 - min(abs(fract(yy) - 0.5) / max(fwidth(yy), 1e-4), 1.0);
+float rim = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
+totalEmissiveRadiance += blue * vec3(0.75, 1.0, 0.0) * (contour * 0.9 + rim * 0.5);
+float cut = 1.0 - smoothstep(0.0, 1.5 * uDpr, abs(gl_FragCoord.x - seamX));
+totalEmissiveRadiance += vec3(1.0, 1.0, 0.0) * cut * step(0.002, uSeam) * step(uSeam, 0.998) * 2.0;`,
+      );
+  };
+  return { material, uniforms };
+}
+
+// The live bust: turns toward the cursor, and opens from marble to blueprint
+// as you scroll through About. Reduced motion: a still split, no turning.
+export default function BustScene({ stageRef }) {
+  const holder = useRef(null);
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    const container = holder.current;
+    if (!stage || !container) return undefined;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const section = stage.closest("section") || stage;
+
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    } catch {
+      return undefined; // no WebGL: the still image stays
+    }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.domElement.className = "bust-canvas";
+    renderer.domElement.setAttribute("aria-hidden", "true");
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
+    camera.position.set(0, 0, 2.6);
+    // Warm key from the painting, cobalt rim from behind, a soft fill.
+    scene.add(new THREE.HemisphereLight(0xfff4e6, 0x2a2240, 0.55));
+    const key = new THREE.DirectionalLight(0xffe1b0, 2.6);
+    key.position.set(-1.2, 1.4, 1.3);
+    const rim = new THREE.DirectionalLight(0x5b3cff, 3.2);
+    rim.position.set(1.4, 0.6, -1.2);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.35);
+    fill.position.set(1, 0, 1.5);
+    scene.add(key, rim, fill);
+    const pivot = new THREE.Group();
+    pivot.position.y = -0.07; // sit a little low, clear of the stage labels
+    scene.add(pivot);
+
+    let uniforms = null;
+    let material = null;
+    let disposed = false;
+    let visible = false;
+    let loadStarted = false;
+    let frame = 0;
+    let yaw = 0;
+    let pitch = 0;
+    let targetYaw = 0;
+    let targetPitch = 0;
+    let lastPointer = -Infinity;
+
+    const draw = () => renderer.render(scene, camera);
+
+    const resize = () => {
+      const w = container.clientWidth || 1;
+      const h = container.clientHeight || 1;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      if (uniforms) renderer.getDrawingBufferSize(uniforms.uRes.value);
+      draw();
+    };
+
+    const updateSeam = () => {
+      if (reduce) return;
+      const box = section.getBoundingClientRect();
+      const seam = seamFor(box.top, box.height, window.innerHeight);
+      stage.style.setProperty("--seam", seam.toFixed(4));
+      if (uniforms) uniforms.uSeam.value = seam;
+    };
+
+    const loop = (now = performance.now()) => {
+      frame = 0;
+      if (disposed || !visible) return;
+      updateSeam();
+      if (now - lastPointer > 2500) {
+        // idle: drift slowly back toward you
+        targetYaw = Math.sin(now / 2400) * 0.12;
+        targetPitch = 0;
+      }
+      yaw += (targetYaw - yaw) * 0.06;
+      pitch += (targetPitch - pitch) * 0.06;
+      pivot.rotation.set(pitch, yaw, 0);
+      draw();
+      frame = requestAnimationFrame(loop);
+    };
+    const start = () => {
+      if (!reduce && !frame) frame = requestAnimationFrame(loop);
+    };
+
+    const onPointerMove = (event) => {
+      targetYaw = ((event.clientX / window.innerWidth) * 2 - 1) * 0.55;
+      targetPitch = ((event.clientY / window.innerHeight) * 2 - 1) * 0.12;
+      lastPointer = performance.now();
+    };
+    if (!reduce) {
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+    }
+
+    const load = () => {
+      if (loadStarted) return;
+      loadStarted = true;
+      new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(
+        MODEL,
+        (gltf) => {
+          if (disposed) return;
+          const object = gltf.scene;
+          const size = new THREE.Box3()
+            .setFromObject(object)
+            .getSize(new THREE.Vector3());
+          ({ material, uniforms } = bustMaterial(size.y));
+          uniforms.uDpr.value = dpr;
+          object.traverse((node) => {
+            if (node.isMesh) node.material = material;
+          });
+          // Fit any model to one unit tall, centred on the pivot.
+          object.scale.setScalar(1 / size.y);
+          const center = new THREE.Box3()
+            .setFromObject(object)
+            .getCenter(new THREE.Vector3());
+          object.position.sub(center);
+          pivot.add(object);
+          updateSeam();
+          resize();
+          stage.classList.add("is-live");
+          start();
+        },
+        undefined,
+        (error) => console.error("Failed to load the bust", error),
+      );
+    };
+
+    // Only load and animate while the stage is (nearly) on screen.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        visible = entry.isIntersecting;
+        if (visible) {
+          load();
+          start();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    observer.observe(stage);
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(container);
+
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      resizeObserver.disconnect();
+      window.removeEventListener("pointermove", onPointerMove);
+      pivot.traverse((node) => {
+        if (node.isMesh) node.geometry.dispose();
+      });
+      if (material) material.dispose();
+      renderer.dispose();
+      renderer.domElement.remove();
+      stage.classList.remove("is-live");
+      stage.style.setProperty("--seam", "0.5");
+    };
+  }, [stageRef]);
+
+  return <div className="bust-scene" ref={holder} />;
+}

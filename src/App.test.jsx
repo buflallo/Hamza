@@ -1,21 +1,31 @@
 import { expect, test, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Projects from "./Projects";
 import Footer from "./Footer";
-import ResponsiveAppBar from "./ResponsiveAppBar";
-import { NAV_SECTIONS, PROJECTS, SOCIAL_LINKS } from "./data/content";
+import Masthead from "./Masthead";
+import { NAV, PROJECTS, SOCIAL_LINKS } from "./data/content";
 
 // The About section renders a WebGL scene, which jsdom cannot do.
 vi.mock("./About", () => ({ default: () => <section id="About" /> }));
 
-test("navigation links to every section", () => {
-  render(<ResponsiveAppBar />);
-  NAV_SECTIONS.forEach((name) => {
-    expect(screen.getByRole("tab", { name })).toHaveAttribute(
+test("the numbered index links to every section", () => {
+  render(<Masthead />);
+  NAV.forEach(({ id, label }) => {
+    expect(screen.getByRole("link", { name: label })).toHaveAttribute(
       "href",
-      `#${name}`,
+      `#${id}`,
     );
   });
+});
+
+test("the index button folds the list open and shut", () => {
+  render(<Masthead />);
+  const toggle = screen.getByRole("button", { name: /Index/ });
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
+  fireEvent.click(toggle);
+  expect(toggle).toHaveAttribute("aria-expanded", "true");
+  fireEvent.keyDown(window, { key: "Escape" });
+  expect(toggle).toHaveAttribute("aria-expanded", "false");
 });
 
 test("projects renders one video per project with media", () => {
@@ -30,7 +40,7 @@ test("projects renders one video per project with media", () => {
 test("footer links to every social profile safely", () => {
   render(<Footer />);
   SOCIAL_LINKS.forEach(({ label, href }) => {
-    const link = screen.getByRole("link", { name: label.toUpperCase() });
+    const link = screen.getByRole("link", { name: label });
     expect(link).toHaveAttribute("href", href);
     expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
   });

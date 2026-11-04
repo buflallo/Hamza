@@ -9,54 +9,27 @@ const ramp = (v, from, to) => {
 };
 
 // Opacity of each backdrop layer. `s` is the scroll depth and `b` the distance
-// to the page end, both in viewport heights.
+// to the page end, both in viewport heights. Down from the ceiling: painting,
+// print, dark; at the very end the painting comes back.
 export const layerOpacities = (s, b) => {
-  const ghostIn = ramp(s, 1.5, 2.5);
-  const footIn = ramp(1.6 - b, 0, 1.3);
-  const toFooter = 1 - ramp(1.9 - b, 0, 0.9);
+  const foot = ramp(1.6 - b, 0, 1.2);
   return {
-    full: 1 - ramp(s, 0.6, 1.4),
-    print: 1 - ramp(s, 1.2, 2.2),
-    veil: 0.55 * ramp(s, 0, 1) * toFooter,
-    ghost: 0.55 * ghostIn * toFooter,
-    foot: footIn,
+    full: 1 - ramp(s, 0.5, 1.3),
+    print: 1 - ramp(s, 1.0, 1.8),
+    veil: ramp(s, 0.3, 1.2) * (1 - foot),
+    foot,
   };
 };
 
 const useBackgroundTransition = () => {
   const layers = useRef({});
   const setBackground = useCallback(() => {
+    if (window.innerWidth < 600) return;
     const scrollPosition = window.scrollY;
     const scrollBottom = document.body.scrollHeight - window.innerHeight;
-    const transitionBottom =
-      (scrollBottom - scrollPosition) / window.innerHeight;
-
-    let progress = Math.min(
-      Math.max(0, scrollPosition / window.innerHeight),
-      1,
-    );
-    let direction = "to right bottom";
-    if (transitionBottom <= 1) {
-      direction = "to top";
-      progress = transitionBottom;
-    }
-
-    let colorStop = 0;
-    let color2Stop = 0;
-    if (scrollPosition && transitionBottom <= 1) {
-      colorStop = `${(1 - transitionBottom) * 50}%`;
-      color2Stop = `${(1 - transitionBottom) * 30}%`;
-    }
-
-    const gradient = `linear-gradient(${direction}, rgb(255, 255, 0) ${color2Stop}, rgba(29, 27, 27, ${progress}) ${colorStop})`;
-    const isNarrow = window.innerWidth < 600;
-    const style = document.body.style;
-    style.background = gradient;
-
-    if (isNarrow) return;
     const opacities = layerOpacities(
       scrollPosition / window.innerHeight,
-      transitionBottom,
+      (scrollBottom - scrollPosition) / window.innerHeight,
     );
     Object.entries(opacities).forEach(([name, value]) => {
       const node = layers.current[name];

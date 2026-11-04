@@ -22,7 +22,7 @@ vi.mock("./data/content", async (importOriginal) => {
 test("footer shows email and CV links when configured", async () => {
   const { default: Footer } = await import("./Footer");
   render(<Footer />);
-  expect(screen.getByRole("link", { name: "EMAIL" })).toHaveAttribute(
+  expect(screen.getByRole("link", { name: "Email" })).toHaveAttribute(
     "href",
     "mailto:hello@example.com",
   );

@@ -6,6 +6,8 @@ import useBackgroundTransition from "./hooks/useBackgroundTransition";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const theme = createTheme({
+  // CssBaseline paints the body with this; the page is dark from top to bottom.
+  palette: { background: { default: "#1d1b1b" } },
   typography: {
     fontFamily: '"Space Mono", Arial, sans-serif',
     h1: {
