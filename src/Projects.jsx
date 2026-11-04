@@ -7,10 +7,11 @@ import Link from "@mui/material/Link";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import Title from "./Title";
+import Constellation from "./Constellation";
 import useInView from "./hooks/useInView";
-import { PROJECTS } from "./data/content";
+import { EXPERIENCE, PROJECTS } from "./data/content";
 
-const ProjectText = ({ title, category, repo, demo, index }) => {
+const ProjectText = ({ title, category, note, repo, demo, index }) => {
   const [ref, inView] = useInView();
   const rise = `rise${inView ? " is-in" : ""}`;
   return (
@@ -70,6 +71,25 @@ const ProjectText = ({ title, category, repo, demo, index }) => {
       >
         {category}
       </Typography>
+      {note && (
+        <Typography
+          textAlign="inherit"
+          color="white"
+          variant="h4"
+          component="p"
+          fontWeight="500"
+          className={rise}
+          style={{ "--rise-delay": "0.35s" }}
+          sx={{
+            mt: 1,
+            textTransform: "uppercase",
+            fontSize: { xs: "15px", md: "1.1vw" },
+            maxWidth: "24em",
+          }}
+        >
+          {note}
+        </Typography>
+      )}
       {(repo || demo) && (
         <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
           {repo && (
@@ -103,6 +123,34 @@ const ProjectText = ({ title, category, repo, demo, index }) => {
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// A project without public media is shown as its platform diagram.
+const ProjectDiagram = ({ title, index }) => {
+  const [ref, inView] = useInView();
+  return (
+    <Grid
+      item
+      xs={12}
+      sm={6}
+      md={4}
+      sx={{ order: { xs: index * 3 + 1, sm: 0 } }}
+    >
+      <Box
+        ref={ref}
+        className={`develop blueprint${inView ? " is-in" : ""}`}
+        style={{ aspectRatio: "1 / 1" }}
+        sx={{ width: { xs: "calc(100% - 28px)", sm: "100%" } }}
+      >
+        <Box className="develop-media" sx={{ p: "6%" }}>
+          <Constellation nodes={EXPERIENCE.nodes.slice(0, 6)} size={440} />
+        </Box>
+        <p className="visually-hidden">
+          Diagram of {title}: {EXPERIENCE.nodes.join(", ")}.
+        </p>
+      </Box>
+    </Grid>
+  );
+};
 
 const ProjectMedia = ({ media, alt, title, ratio, index }) => {
   const [ref, inView] = useInView();
@@ -221,7 +269,11 @@ export default function Projects() {
                   return <ProjectText key={cell} index={index} {...project} />;
                 }
                 if (cell === "media") {
-                  return <ProjectMedia key={cell} index={index} {...project} />;
+                  return project.diagram ? (
+                    <ProjectDiagram key={cell} index={index} {...project} />
+                  ) : (
+                    <ProjectMedia key={cell} index={index} {...project} />
+                  );
                 }
                 return <Spacer key={cell} />;
               })}

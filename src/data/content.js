@@ -1,4 +1,4 @@
-export const NAV_SECTIONS = ["About", "Works", "Contact"];
+export const NAV_SECTIONS = ["About", "Experience", "Works", "Contact"];
 
 // Optional public contact details. Leave empty to hide the link.
 export const CONTACT_EMAIL = "";
@@ -11,16 +11,85 @@ export const SOCIAL_LINKS = [
 ];
 
 export const TAGS = [
-  "Web Development",
-  "Software Engineering",
-  "IT Solutions",
-  "UI/UX Design",
-  "Mathematics",
-  "Cyber Security",
+  "Python backend",
+  "DevOps",
+  "Platform engineering",
+  "Kubernetes",
+  "OpenStack",
+  "IAM & security",
 ];
+
+export const OPEN_TO = "Open to junior / mid roles";
+
+export const HERO = {
+  lead: "Platform",
+  rest: "& backend engineer",
+  text: "Python, Kubernetes and OpenStack. I led about ten engineers building a sovereign cloud for a university.",
+  open: "Open to backend · DevOps · platform roles",
+};
+
+export const ABOUT =
+  "I build the platform underneath products: Python and Django control planes, Kubernetes, OpenStack, identity and GitOps. For two years I led about ten engineers on AZUL Cloud, a sovereign cloud for Mohammed VI Polytechnic University. I trained at 1337 Coding School, hold a degree in computer science, and also ship interfaces in React and Vue. Looking for a Python backend, DevOps or platform engineering role.";
+
+export const EXPERIENCE = {
+  name: "AZUL Cloud",
+  period: "2024 – 2026",
+  role: "Technical lead",
+  org: "Mohammed VI Polytechnic University",
+  summary:
+    "A sovereign, multi-tenant cloud built on-premises: IaaS, PaaS, managed databases, networking, identity and billing behind one account.",
+  nodes: [
+    "IAM",
+    "OpenStack",
+    "Kubernetes",
+    "Databases",
+    "Network",
+    "Billing",
+    "Notify",
+    "GitOps",
+  ],
+  numbers: [
+    { value: "10", label: "engineers" },
+    { value: "13", label: "repositories" },
+    { value: "2,900", label: "commits" },
+    { value: "22+", label: "written decisions" },
+  ],
+  details: [
+    {
+      title: "Platform control plane",
+      text: "Led the Django/Celery control plane that turns tenant requests into Kubernetes resources: builds from source with kpack, deploys through ArgoCD, provisions managed PostgreSQL (CloudNativePG) and MongoDB (Percona), with per-tenant Cilium network policies.",
+    },
+    {
+      title: "IaaS on OpenStack",
+      text: "Oversaw the VM service (create, power, resize, snapshots, SSH keys) on Nova, Keystone and Vault, with a transactional outbox on RabbitMQ so no operation is lost or duplicated.",
+    },
+    {
+      title: "Identity and authorization",
+      text: "Drove the shared IAM layer: Keycloak, an authorize API and OPA/Rego policies across compute, network, storage, PaaS and IAM, with provider credentials held per organization in Vault.",
+    },
+    {
+      title: "Onboarding, billing, notifications",
+      text: "Delivered a saga-based onboarding service with compensation and idempotent retries, billing on OpenCost data, and event-driven notifications on RabbitMQ.",
+    },
+    {
+      title: "Infrastructure and delivery",
+      text: "Oversaw Terraform and Ansible for OpenStack-Ansible and RKE2, GitOps with ArgoCD and Kustomize, and a cluster stack of Cilium, Rook-Ceph, Vault, Harbor, Prometheus and Tetragon.",
+    },
+    {
+      title: "Engineering rigor",
+      text: "Set the architecture rules (one owner per piece of state, no provider call without explicit authority, Postgres as source of truth), recorded in 22+ ADRs and enforced by guardrail and end-to-end tests.",
+    },
+  ],
+};
 
 // Each project may also set `repo` and/or `demo` URLs; links render only when present.
 export const PROJECTS = [
+  {
+    title: "AZUL Cloud",
+    category: "Platform engineering · 2024–2026",
+    diagram: true,
+    note: "Private repositories, so the story is told as a diagram.",
+  },
   {
     title: "Minishell",
     category: "Software Development",
@@ -53,32 +122,35 @@ export const PROJECTS = [
 
 export const SKILLS = [
   {
-    id: "software",
-    title: "Software Development",
+    id: "backend",
+    title: "Backend",
     color: "#FFD100",
-    viewBox: "0 -3 46 46",
     description:
-      "With a solid foundation in software development, I excel in languages like C, C++, and TypeScript. My expertise extends to implementing efficient design patterns to enhance performance and scalability, ensuring that each project I undertake operates seamlessly and effectively.",
+      "Resilient APIs and control planes in Python: Django, DRF and Celery, with PostgreSQL, Redis and RabbitMQ.",
+    stack: ["Python", "Django", "Celery", "PostgreSQL", "RabbitMQ"],
+  },
+  {
+    id: "platform",
+    title: "Platform",
+    color: "#61DAFB",
+    description:
+      "Kubernetes, OpenStack and the layers under them: Cilium, Rook-Ceph, Harbor, Vault and per-tenant networking.",
+    stack: ["Kubernetes", "OpenStack", "Cilium", "Rook-Ceph", "Vault"],
+  },
+  {
+    id: "devops",
+    title: "DevOps",
+    color: "#E0234E",
+    description:
+      "Delivery as code: GitOps with ArgoCD, Terraform, Ansible, kpack buildpacks and GitLab CI.",
+    stack: ["ArgoCD", "Terraform", "Ansible", "GitLab CI", "Helm"],
   },
   {
     id: "frontend",
-    title: "Frontend Development",
-    color: "#61DAFB",
-    viewBox: "0 0 24 24",
+    title: "Frontend",
+    color: "#E1FF00",
     description:
-      "Proficiency in crafting captivating user interfaces using technologies like React, Vue.js, HTML, and CSS. With a keen eye for design and usability, I leverage tools like Figma to create intuitive and visually appealing experiences that engage users effectively.",
-  },
-  {
-    id: "backend",
-    title: "Backend Development",
-    color: "#E0234E",
-    viewBox: "0 0 24 24",
-    description:
-      "Crafting resilient server-side systems using frameworks like Nest.js and Laravel. Proficient in database management with MySQL and PostgreSQL, I excel in creating efficient data architectures. My expertise in server-side programming and API development ensures the creation of robust, scalable web solutions.",
+      "Interfaces when the product needs them: React, TypeScript and Vue.js, shaped in Figma.",
+    stack: ["React", "TypeScript", "Vue", "Figma"],
   },
 ];
-
-export const QUOTE = {
-  text: "Sometimes the best way to solve a problem is to help others.",
-  author: "Uncle Iroh, 'Avatar: The Last Airbender'",
-};

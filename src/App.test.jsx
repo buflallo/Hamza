@@ -18,9 +18,10 @@ test("navigation links to every section", () => {
   });
 });
 
-test("projects renders one video per project", () => {
+test("projects renders one video per project with media", () => {
   const { container } = render(<Projects />);
-  expect(container.querySelectorAll("video")).toHaveLength(PROJECTS.length);
+  const withMedia = PROJECTS.filter((project) => project.media);
+  expect(container.querySelectorAll("video")).toHaveLength(withMedia.length);
   PROJECTS.forEach(({ title }) => {
     expect(screen.getByText(title)).toBeInTheDocument();
   });

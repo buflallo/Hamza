@@ -7,14 +7,15 @@ vi.mock("./data/content", async (importOriginal) => {
     ...original,
     CONTACT_EMAIL: "hello@example.com",
     CV_URL: "cv.pdf",
-    PROJECTS: [
-      {
-        ...original.PROJECTS[0],
-        repo: "https://example.com/repo",
-        demo: "https://example.com/demo",
-      },
-      ...original.PROJECTS.slice(1),
-    ],
+    PROJECTS: original.PROJECTS.map((project) =>
+      project.title === "Minishell"
+        ? {
+            ...project,
+            repo: "https://example.com/repo",
+            demo: "https://example.com/demo",
+          }
+        : project,
+    ),
   };
 });
 

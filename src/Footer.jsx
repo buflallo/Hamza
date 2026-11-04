@@ -1,7 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { CONTACT_EMAIL, CV_URL, SOCIAL_LINKS, TAGS } from "./data/content";
+import {
+  CONTACT_EMAIL,
+  CV_URL,
+  OPEN_TO,
+  SOCIAL_LINKS,
+  TAGS,
+} from "./data/content";
 import useColorTransition from "./hooks/useColorTransition";
 import useInView from "./hooks/useInView";
 
@@ -97,13 +103,31 @@ export default function Footer() {
             gap: "1vw",
           }}
         >
+          <Box
+            component="li"
+            className={`pill pill-open${inView ? " is-in" : ""}`}
+            style={{ "--i": 0, "--tilt": "-2deg" }}
+            sx={{
+              listStyle: "none",
+              border: "2px solid black",
+              borderRadius: "50px",
+              padding: "5px",
+              height: "min-content",
+              background: "#1D1B1B",
+              ml: { xs: "0", md: "-3vw" },
+            }}
+          >
+            <Typography color="#FFFF00" variant="h6" component="span">
+              {OPEN_TO}
+            </Typography>
+          </Box>
           {TAGS.map((tag, i) => (
             <Box
               key={tag}
               component="li"
               className={`pill${inView ? " is-in" : ""}`}
               style={{
-                "--i": i,
+                "--i": i + 1,
                 "--tilt": `${[-3, 2, -2, 3][i % 4]}deg`,
               }}
               sx={{
@@ -112,7 +136,6 @@ export default function Footer() {
                 borderRadius: "50px",
                 padding: "5px",
                 height: "min-content",
-                ml: i === 0 ? { xs: "0", md: "-3vw" } : 0,
               }}
             >
               <Typography color={color} variant="h6" component="span">
@@ -143,7 +166,7 @@ export default function Footer() {
             }}
           >
             <Typography color={color} variant="h6" component="p">
-              HAVE A PROJECT IN MIND?
+              HIRING FOR THE PLATFORM?
             </Typography>
             {/* <Button></Button> */}
           </Box>

@@ -6,6 +6,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import { useEffect, useRef, useState } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
+import { ABOUT } from "./data/content";
 
 // Height of the bust in scene units (the camera sits 1 unit away).
 const BUST_HEIGHT = 0.95;
@@ -223,13 +224,7 @@ export default function About() {
           fontWeight="500"
           textTransform={"uppercase"}
         >
-          As a full stack developer at 1337 Coding School, I'm passionate about
-          crafting user-centric websites. With a degree in computer science and
-          expertise in React, Nest, Laravel and Vue.js, I've led projects like
-          dynamic multilingual platforms for Sté IQRAE Négoce and responsive
-          e-commerce sites for Royale Maroc d'Agriculture. Now seeking
-          internship opportunities to expand my skills and contribute to
-          innovative projects.
+          {ABOUT}
         </Typography>
       </Box>
       <Box

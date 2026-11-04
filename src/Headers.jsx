@@ -2,6 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import useColorTransition from "./hooks/useColorTransition";
+import { HERO } from "./data/content";
 
 const ACCENT = "#2E05D1";
 
@@ -45,7 +46,7 @@ const Headers = () => {
             textShadow: `-4px -4px 0 ${ACCENT}`,
           }}
         >
-          Software & Web Developer
+          {HERO.lead} {HERO.rest}
         </Typography>
       </Box>
 
@@ -66,9 +67,27 @@ const Headers = () => {
           variant="h4"
           component="p"
         >
-          I am a seasoned developer based in Morocco, passionate about crafting
-          digital solutions that merge simplicity with functionality. I LOVE
-          PIZZA AND ART.
+          {HERO.text}
+        </Typography>
+        <Typography
+          component="p"
+          sx={{
+            display: "inline-block",
+            mt: 3,
+            px: 2,
+            py: "6px",
+            border: "2px solid #E1FF00",
+            borderRadius: "40px",
+            background: "#1D1B1B",
+            color: "#E1FF00",
+            fontFamily: '"PPFuji", sans-serif',
+            fontWeight: "bold",
+            fontSize: { xs: "13px", md: "16px" },
+            letterSpacing: "0.14em",
+            textTransform: "uppercase",
+          }}
+        >
+          {HERO.open}
         </Typography>
       </Box>
     </Box>

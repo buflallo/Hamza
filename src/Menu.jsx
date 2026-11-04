@@ -30,6 +30,12 @@ export const StyledTab = styled((props) => (
   fontSize: "calc(1em + 0.5vw)",
   marginRight: theme.spacing(1),
   color: "rgba(29, 27, 27, 0.75)",
+  [theme.breakpoints.down("sm")]: {
+    minWidth: 0,
+    padding: "12px 8px",
+    marginRight: 0,
+    fontSize: "15px",
+  },
   "&.Mui-selected": {
     color: "#1D1B1B",
   },

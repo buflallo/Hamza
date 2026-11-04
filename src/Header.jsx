@@ -3,6 +3,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import ResponsiveAppBar from "./ResponsiveAppBar";
 import Headers from "./Headers";
+import Experience from "./Experience";
 import Projects from "./Projects";
 import Skills from "./Skills";
 import Footer from "./Footer";
@@ -37,6 +38,7 @@ const Header = () => (
         <React.Suspense fallback={<AboutPlaceholder />}>
           <LazyAbout />
         </React.Suspense>
+        <Experience />
         <Projects />
         <Skills />
       </Box>
