@@ -16,7 +16,6 @@ const MODES = {
     baseYaw: 0,
     turn: 0.55,
     tilt: 0.12,
-    drift: 0.12,
     seam: true,
   },
   hero: {
@@ -25,7 +24,6 @@ const MODES = {
     baseYaw: -1.05,
     turn: 0.32,
     tilt: 0.08,
-    drift: 0.06,
     seam: false,
   },
 };
@@ -166,8 +164,9 @@ export default function BustScene({ stageRef, mode = "about" }) {
     let pitch = 0;
     let targetYaw = 0;
     let targetPitch = 0;
-    let lastPointer = -Infinity;
     let lastFrame = 0;
+    let lastSeam = -1;
+    let restTimer = 0;
 
     const draw = () => renderer.render(scene, camera);
 
@@ -181,27 +180,31 @@ export default function BustScene({ stageRef, mode = "about" }) {
       draw();
     };
 
+    // Returns true when the seam moved since the last frame.
     const updateSeam = () => {
       if (!setup.seam) {
         if (uniforms) uniforms.uSeam.value = 0; // all marble
-        return;
+        return false;
       }
-      if (reduce) return;
+      if (reduce) return false;
       const box = section.getBoundingClientRect();
       const seam = seamFor(box.top, box.height, window.innerHeight);
+      if (Math.abs(seam - lastSeam) < 0.0001) return false;
+      lastSeam = seam;
       stage.style.setProperty("--seam", seam.toFixed(4));
       if (uniforms) uniforms.uSeam.value = seam;
+      return true;
     };
 
+    // Draws only while something moves, then sleeps until the pointer or the
+    // page does: no work, and no battery, while the head is at rest.
     const loop = (now = performance.now()) => {
       frame = 0;
-      if (disposed || !visible) return;
-      updateSeam();
-      if (now - lastPointer > 6000) {
-        // idle for a while: drift slowly back to the resting pose
-        targetYaw = Math.sin(now / 2400) * setup.drift;
-        targetPitch = 0;
+      if (disposed || !visible) {
+        lastFrame = 0;
+        return;
       }
+      const seamMoved = updateSeam();
       // ease by time, not frames, so slow machines turn just as fast
       const dt = lastFrame ? Math.min(now - lastFrame, 100) : 16.7;
       lastFrame = now;
@@ -210,7 +213,11 @@ export default function BustScene({ stageRef, mode = "about" }) {
       pitch += (targetPitch - pitch) * ease;
       pivot.rotation.set(pitch, setup.baseYaw + yaw, 0);
       draw();
-      frame = requestAnimationFrame(loop);
+      const turning =
+        Math.abs(targetYaw - yaw) > 0.0004 ||
+        Math.abs(targetPitch - pitch) > 0.0004;
+      if (turning || seamMoved) frame = requestAnimationFrame(loop);
+      else lastFrame = 0;
     };
     const start = () => {
       if (!reduce && !frame) frame = requestAnimationFrame(loop);
@@ -219,10 +226,20 @@ export default function BustScene({ stageRef, mode = "about" }) {
     const onPointerMove = (event) => {
       targetYaw = ((event.clientX / window.innerWidth) * 2 - 1) * setup.turn;
       targetPitch = ((event.clientY / window.innerHeight) * 2 - 1) * setup.tilt;
-      lastPointer = performance.now();
+      start();
+      // after a while without the pointer, settle back to the resting pose
+      window.clearTimeout(restTimer);
+      restTimer = window.setTimeout(() => {
+        targetYaw = 0;
+        targetPitch = 0;
+        start();
+      }, 6000);
     };
     if (!reduce) {
       window.addEventListener("pointermove", onPointerMove, { passive: true });
+      if (setup.seam) {
+        window.addEventListener("scroll", start, { passive: true });
+      }
     }
 
     const load = () => {
@@ -259,9 +276,9 @@ export default function BustScene({ stageRef, mode = "about" }) {
       );
     };
 
-    // The hero waits until the page has loaded and gone quiet, so the first
-    // screen stays as fast as the still; About loads as it comes near.
-    let ready = mode !== "hero";
+    // Wait until the page has loaded and gone quiet, so the first screen
+    // stays as fast as the stills; then load as the stage comes near.
+    let ready = false;
     let idleHandle = 0;
     const whenIdle = (callback) =>
       window.requestIdleCallback
@@ -277,10 +294,8 @@ export default function BustScene({ stageRef, mode = "about" }) {
     const onPageLoad = () => {
       idleHandle = whenIdle(goLive);
     };
-    if (!ready) {
-      if (document.readyState === "complete") onPageLoad();
-      else window.addEventListener("load", onPageLoad, { once: true });
-    }
+    if (document.readyState === "complete") onPageLoad();
+    else window.addEventListener("load", onPageLoad, { once: true });
 
     // Only load and animate while the stage is (nearly) on screen.
     const observer = new IntersectionObserver(
@@ -306,6 +321,8 @@ export default function BustScene({ stageRef, mode = "about" }) {
       observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("scroll", start);
+      window.clearTimeout(restTimer);
       pivot.traverse((node) => {
         if (node.isMesh) node.geometry.dispose();
       });

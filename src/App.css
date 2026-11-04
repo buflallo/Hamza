@@ -653,7 +653,7 @@ summary:focus-visible {
         rgba(29, 27, 27, 0.15) 40%,
         rgba(29, 27, 27, 0.88)
       ),
-      url("/background2.webp") 30% 30% / cover;
+      url("/background2-phone.webp") 30% 30% / cover;
   }
   .open-pill {
     font-size: 11px;
@@ -1201,6 +1201,13 @@ summary:focus-visible {
     linear-gradient(rgba(29, 27, 27, 0.62), rgba(29, 27, 27, 0.62)),
     url("/background2.webp") center 30% / cover;
 }
+@media (max-width: 599px) {
+  .band-frontend {
+    background-image:
+      linear-gradient(rgba(29, 27, 27, 0.62), rgba(29, 27, 27, 0.62)),
+      url("/background2-phone.webp");
+  }
+}
 .band-backend {
   background-color: #262222;
 }
@@ -1402,7 +1409,7 @@ summary:focus-visible {
         rgba(29, 27, 27, 0.55) 60%,
         rgba(29, 27, 27, 0.2)
       ),
-      url("/background2.webp") 70% 20% / cover;
+      url("/background2-phone.webp") 70% 20% / cover;
   }
   .tags .pill {
     font-size: 12px;

@@ -5,19 +5,26 @@ import { prefersReducedMotion, wantsScene } from "./sceneSupport";
 
 const BustScene = React.lazy(() => import("./BustScene"));
 
-// The live head arrives only after the page has loaded, on wide screens, and
-// not at all when motion is reduced (the still is the same pose).
+// The live head only matters once the cursor moves: at rest it looks exactly
+// like the still. So it loads on the first mouse movement after the page has
+// loaded, on wide screens, and never when motion is reduced.
 const useLateScene = () => {
   const [live, setLive] = useState(false);
   useEffect(() => {
     if (!wantsScene() || prefersReducedMotion()) return undefined;
-    const go = () => setLive(true);
-    if (document.readyState === "complete") {
-      go();
-      return undefined;
-    }
-    window.addEventListener("load", go, { once: true });
-    return () => window.removeEventListener("load", go);
+    const onMove = (event) => {
+      if (event.pointerType === "touch") return; // a tap is not a cursor
+      window.removeEventListener("pointermove", onMove);
+      setLive(true);
+    };
+    const listen = () =>
+      window.addEventListener("pointermove", onMove, { passive: true });
+    if (document.readyState === "complete") listen();
+    else window.addEventListener("load", listen, { once: true });
+    return () => {
+      window.removeEventListener("load", listen);
+      window.removeEventListener("pointermove", onMove);
+    };
   }, []);
   return live;
 };

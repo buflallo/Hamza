@@ -60,7 +60,11 @@ export default function Experience() {
           className={`experience-diagram ${rise}`}
           style={{ "--rise-delay": "0.2s" }}
         >
-          <Constellation nodes={nodes} hub="bust/blueprint.webp" />
+          {/* the head loads when the section comes near, not with the page */}
+          <Constellation
+            nodes={nodes}
+            hub={inView ? "bust/blueprint.webp" : undefined}
+          />
           <p className="visually-hidden">
             Platform services: {nodes.join(", ")}.
           </p>

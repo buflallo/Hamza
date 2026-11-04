@@ -54,8 +54,8 @@ export default function About() {
           className="bust-still"
           src="bust/split.webp"
           alt="Bust of Hamza, half marble and half blueprint"
-          width="686"
-          height="760"
+          width="600"
+          height="665"
           loading="lazy"
         />
         {scene && (
