@@ -30,7 +30,7 @@ export default function Masthead() {
       className={`masthead${solid || open ? " is-solid" : ""}`}
       aria-label="Sections"
     >
-      <a className="masthead-name misreg" href="#top">
+      <a className="masthead-name" href="#top">
         Hamza Lachkar
       </a>
       <button

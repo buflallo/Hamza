@@ -178,6 +178,10 @@ export default function Projects() {
       <p className={`voice ${rise}`} style={{ "--rise-delay": "0.12s" }}>
         {PROJECTS_HEAD.line}
       </p>
+      <p className={`projects-hint ${rise}`} style={{ "--rise-delay": "0.2s" }}>
+        <span aria-hidden="true">↘ </span>
+        {PROJECTS_HEAD.hint}
+      </p>
       <div className="strata-wrap">
         <div className="ruler" aria-hidden="true">
           <span className="ruler-structure">Structure</span>

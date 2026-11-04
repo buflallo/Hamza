@@ -1,14 +1,10 @@
 import React, { Suspense, useRef, useState } from "react";
 import useInView from "./hooks/useInView";
 import { ABOUT, sectionNumber } from "./data/content";
+import { wantsScene } from "./sceneSupport";
 
 // Only this chunk pulls in three.js, and only on wide screens with WebGL.
 const BustScene = React.lazy(() => import("./BustScene"));
-
-const wantsScene = () =>
-  typeof window !== "undefined" &&
-  typeof window.WebGLRenderingContext !== "undefined" &&
-  window.matchMedia("(min-width: 900px)").matches;
 
 export default function About() {
   const [ref, inView] = useInView();

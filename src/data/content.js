@@ -110,6 +110,7 @@ export const EXPERIENCE = {
 export const PROJECTS_HEAD = {
   title: "What it stands on",
   line: "Before the cloud: a shell, a web server, a game engine, a multiplayer game. Built from scratch at 1337.",
+  hint: "Hover a row to see it run",
 };
 
 // Each project may also set `repo` and/or `demo` URLs; links render only when present.

@@ -4,6 +4,31 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 
 const MODEL = "bust/hamza.glb";
+// The hero and About load the same file; keep it in memory for the second one.
+THREE.Cache.enabled = true;
+
+// Two ways the head appears. About: facing you, the seam driven by scroll.
+// Hero: in marble profile, framed exactly like the still it replaces.
+const MODES = {
+  about: {
+    cameraZ: 2.6,
+    lift: -0.07,
+    baseYaw: 0,
+    turn: 0.55,
+    tilt: 0.12,
+    drift: 0.12,
+    seam: true,
+  },
+  hero: {
+    cameraZ: 2.755,
+    lift: 0,
+    baseYaw: -1.05,
+    turn: 0.32,
+    tilt: 0.08,
+    drift: 0.06,
+    seam: false,
+  },
+};
 
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (t) => t * t * (3 - 2 * t);
@@ -86,9 +111,9 @@ totalEmissiveRadiance += vec3(1.0, 1.0, 0.0) * cut * step(0.002, uSeam) * step(u
   return { material, uniforms };
 }
 
-// The live bust: turns toward the cursor, and opens from marble to blueprint
-// as you scroll through About. Reduced motion: a still split, no turning.
-export default function BustScene({ stageRef }) {
+// The live bust: turns toward the cursor and, in About, opens from marble to
+// blueprint as you scroll. Reduced motion: a still split, no turning.
+export default function BustScene({ stageRef, mode = "about" }) {
   const holder = useRef(null);
 
   useEffect(() => {
@@ -99,6 +124,7 @@ export default function BustScene({ stageRef }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const section = stage.closest("section") || stage;
+    const setup = MODES[mode] || MODES.about;
 
     let renderer;
     try {
@@ -116,7 +142,7 @@ export default function BustScene({ stageRef }) {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
-    camera.position.set(0, 0, 2.6);
+    camera.position.set(0, 0, setup.cameraZ);
     // Warm key from the painting, cobalt rim from behind, a soft fill.
     scene.add(new THREE.HemisphereLight(0xfff4e6, 0x2a2240, 0.55));
     const key = new THREE.DirectionalLight(0xffe1b0, 2.6);
@@ -127,7 +153,7 @@ export default function BustScene({ stageRef }) {
     fill.position.set(1, 0, 1.5);
     scene.add(key, rim, fill);
     const pivot = new THREE.Group();
-    pivot.position.y = -0.07; // sit a little low, clear of the stage labels
+    pivot.position.y = setup.lift; // About: a little low, clear of the labels
     scene.add(pivot);
 
     let uniforms = null;
@@ -141,6 +167,7 @@ export default function BustScene({ stageRef }) {
     let targetYaw = 0;
     let targetPitch = 0;
     let lastPointer = -Infinity;
+    let lastFrame = 0;
 
     const draw = () => renderer.render(scene, camera);
 
@@ -155,6 +182,10 @@ export default function BustScene({ stageRef }) {
     };
 
     const updateSeam = () => {
+      if (!setup.seam) {
+        if (uniforms) uniforms.uSeam.value = 0; // all marble
+        return;
+      }
       if (reduce) return;
       const box = section.getBoundingClientRect();
       const seam = seamFor(box.top, box.height, window.innerHeight);
@@ -166,14 +197,18 @@ export default function BustScene({ stageRef }) {
       frame = 0;
       if (disposed || !visible) return;
       updateSeam();
-      if (now - lastPointer > 2500) {
-        // idle: drift slowly back toward you
-        targetYaw = Math.sin(now / 2400) * 0.12;
+      if (now - lastPointer > 6000) {
+        // idle for a while: drift slowly back to the resting pose
+        targetYaw = Math.sin(now / 2400) * setup.drift;
         targetPitch = 0;
       }
-      yaw += (targetYaw - yaw) * 0.06;
-      pitch += (targetPitch - pitch) * 0.06;
-      pivot.rotation.set(pitch, yaw, 0);
+      // ease by time, not frames, so slow machines turn just as fast
+      const dt = lastFrame ? Math.min(now - lastFrame, 100) : 16.7;
+      lastFrame = now;
+      const ease = 1 - Math.pow(0.94, dt / 16.7);
+      yaw += (targetYaw - yaw) * ease;
+      pitch += (targetPitch - pitch) * ease;
+      pivot.rotation.set(pitch, setup.baseYaw + yaw, 0);
       draw();
       frame = requestAnimationFrame(loop);
     };
@@ -182,8 +217,8 @@ export default function BustScene({ stageRef }) {
     };
 
     const onPointerMove = (event) => {
-      targetYaw = ((event.clientX / window.innerWidth) * 2 - 1) * 0.55;
-      targetPitch = ((event.clientY / window.innerHeight) * 2 - 1) * 0.12;
+      targetYaw = ((event.clientX / window.innerWidth) * 2 - 1) * setup.turn;
+      targetPitch = ((event.clientY / window.innerHeight) * 2 - 1) * setup.tilt;
       lastPointer = performance.now();
     };
     if (!reduce) {
@@ -213,6 +248,7 @@ export default function BustScene({ stageRef }) {
             .getCenter(new THREE.Vector3());
           object.position.sub(center);
           pivot.add(object);
+          pivot.rotation.set(0, setup.baseYaw, 0);
           updateSeam();
           resize();
           stage.classList.add("is-live");
@@ -223,11 +259,34 @@ export default function BustScene({ stageRef }) {
       );
     };
 
+    // The hero waits until the page has loaded and gone quiet, so the first
+    // screen stays as fast as the still; About loads as it comes near.
+    let ready = mode !== "hero";
+    let idleHandle = 0;
+    const whenIdle = (callback) =>
+      window.requestIdleCallback
+        ? window.requestIdleCallback(callback, { timeout: 2500 })
+        : window.setTimeout(callback, 900);
+    const goLive = () => {
+      ready = true;
+      if (visible) {
+        load();
+        start();
+      }
+    };
+    const onPageLoad = () => {
+      idleHandle = whenIdle(goLive);
+    };
+    if (!ready) {
+      if (document.readyState === "complete") onPageLoad();
+      else window.addEventListener("load", onPageLoad, { once: true });
+    }
+
     // Only load and animate while the stage is (nearly) on screen.
     const observer = new IntersectionObserver(
       ([entry]) => {
         visible = entry.isIntersecting;
-        if (visible) {
+        if (visible && ready) {
           load();
           start();
         }
@@ -241,6 +300,9 @@ export default function BustScene({ stageRef }) {
     return () => {
       disposed = true;
       cancelAnimationFrame(frame);
+      window.removeEventListener("load", onPageLoad);
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idleHandle);
+      window.clearTimeout(idleHandle);
       observer.disconnect();
       resizeObserver.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
@@ -251,9 +313,9 @@ export default function BustScene({ stageRef }) {
       renderer.dispose();
       renderer.domElement.remove();
       stage.classList.remove("is-live");
-      stage.style.setProperty("--seam", "0.5");
+      if (setup.seam) stage.style.setProperty("--seam", "0.5");
     };
-  }, [stageRef]);
+  }, [stageRef, mode]);
 
-  return <div className="bust-scene" ref={holder} />;
+  return <div className={`bust-scene bust-scene-${mode}`} ref={holder} />;
 }

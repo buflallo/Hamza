@@ -302,7 +302,14 @@ header:hover .misreg {
   line-height: 1;
   text-transform: uppercase;
   color: transparent;
-  -webkit-text-stroke: 1.5px var(--lime);
+  -webkit-text-stroke: 1.2px var(--lime);
+}
+/* outlines blur into blobs when small: solid ink below ~30px */
+.masthead-index .num,
+.ledger .num,
+.contact-links .num {
+  color: var(--lime);
+  -webkit-text-stroke: 0;
 }
 .voice {
   margin: 0;
@@ -313,13 +320,14 @@ header:hover .misreg {
   text-transform: uppercase;
   color: var(--yellow);
 }
+/* long reading: the light cut in normal case; caps stay for short lines */
 .body-text {
   margin: 0;
   font-family: "PPFuji", sans-serif;
-  font-weight: bold;
-  font-size: clamp(15px, 1.25vw, 18px);
-  line-height: 1.45;
-  text-transform: uppercase;
+  font-weight: 500;
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.55;
+  letter-spacing: 0.01em;
   color: #fff;
 }
 .section-title,
@@ -383,6 +391,8 @@ summary:focus-visible {
   text-transform: uppercase;
   text-decoration: none;
   color: #fff;
+  /* a fixed plate: the slip is for the big headlines only */
+  text-shadow: -2px -2px 0 var(--cobalt);
 }
 .masthead-toggle {
   display: none;
@@ -508,11 +518,28 @@ summary:focus-visible {
   top: calc(var(--top) + 6vh);
   width: min(45.5vw, 74vh);
 }
+.hero-bust picture,
 .hero-bust img,
 .contact-bust {
   display: block;
   width: 100%;
   height: auto;
+}
+.hero-bust picture {
+  transition: opacity 0.6s;
+}
+.hero-bust.is-live picture {
+  opacity: 0;
+}
+/* the live head's canvas is framed exactly like the still: the still is a
+   crop of a 1200×1440 render, so the canvas reaches past it on every side */
+.bust-scene.bust-scene-hero {
+  inset: auto;
+  left: -23.72%;
+  top: -20.97%;
+  width: 145.99%;
+  height: 134.2%;
+  pointer-events: none;
 }
 .hero-copy {
   position: absolute;
@@ -871,9 +898,8 @@ summary:focus-visible {
   max-width: 34em;
   font-family: "PPFuji", sans-serif;
   font-weight: 500;
-  font-size: 15px;
-  line-height: 1.5;
-  text-transform: uppercase;
+  font-size: 16px;
+  line-height: 1.55;
 }
 .experience-plane {
   display: grid;
@@ -1019,8 +1045,24 @@ summary:focus-visible {
 }
 .stratum-meta .stratum-note {
   max-width: 30em;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+.projects-hint {
+  margin: 14px 0 0;
+  font-family: "PPFuji", sans-serif;
+  font-weight: bold;
   font-size: 12px;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+@media (max-width: 899px), (hover: none) {
+  .projects-hint {
+    display: none;
+  }
 }
 .stratum-links a {
   margin-right: 16px;
