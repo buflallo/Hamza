@@ -5,6 +5,7 @@ import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.j
 import {
   MODEL,
   addBustLights,
+  addTorch,
   loadEnvironment,
   prepareBust,
   setupRenderer,
@@ -82,6 +83,7 @@ export default function BustScene({ stageRef, mode = "about" }) {
     const camera = new THREE.PerspectiveCamera(30, 1, 0.01, 50);
     camera.position.set(0, 0, setup.cameraZ);
     addBustLights(scene);
+    const torch = addTorch(scene);
     const pivot = new THREE.Group();
     pivot.position.y = setup.lift; // About: a little low, clear of the labels
     scene.add(pivot);
@@ -116,6 +118,18 @@ export default function BustScene({ stageRef, mode = "about" }) {
       draw();
     };
 
+    // The blue plate under the head slips while the seam moves (like the
+    // headlines' print slip), then settles back onto it.
+    let slip = 0;
+    let lastSeamAt = 0;
+    const setSlip = (value) => {
+      slip = value;
+      container.style.filter =
+        slip > 0.3
+          ? `drop-shadow(${(-slip).toFixed(1)}px ${(-slip * 0.6).toFixed(1)}px 0 #2e05d1)`
+          : "";
+    };
+
     // Returns true when the seam moved since the last frame.
     const updateSeam = () => {
       if (!setup.seam) {
@@ -126,7 +140,15 @@ export default function BustScene({ stageRef, mode = "about" }) {
       const box = section.getBoundingClientRect();
       const seam = seamFor(box.top, box.height, window.innerHeight);
       if (Math.abs(seam - lastSeam) < 0.0001) return false;
+      // slip by how fast the seam travels (share of the face per second)
+      const now = performance.now();
+      if (lastSeam >= 0) {
+        const speed =
+          (Math.abs(seam - lastSeam) / Math.max(now - lastSeamAt, 8)) * 1000;
+        setSlip(Math.max(slip, Math.min(8, speed * 14)));
+      }
       lastSeam = seam;
+      lastSeamAt = now;
       stage.style.setProperty("--seam", seam.toFixed(4));
       if (uniforms) uniforms.uSeam.value = seam;
       return true;
@@ -140,9 +162,11 @@ export default function BustScene({ stageRef, mode = "about" }) {
         lastFrame = 0;
         return;
       }
-      const seamMoved = updateSeam();
       const dt = lastFrame ? Math.min(now - lastFrame, 100) : 16.7;
       lastFrame = now;
+      // the plate settles back first; a moving seam can then push it out again
+      if (slip > 0) setSlip(slip > 0.3 ? slip * Math.pow(0.85, dt / 16.7) : 0);
+      const seamMoved = updateSeam();
       adapt(dt);
       // A soft spring toward the cursor: starts gently, follows quickly,
       // settles without a bump. Stepped in small slices so it stays smooth
@@ -156,12 +180,19 @@ export default function BustScene({ stageRef, mode = "about" }) {
         pitch += pitchSpeed * h;
       }
       pivot.rotation.set(pitch, setup.baseYaw + yaw, 0);
+      // the torch travels with the cursor, across and up and down the face
+      torch.position.set(
+        (yaw / setup.turn) * 1.1,
+        0.25 - (pitch / setup.tilt) * 0.7,
+        1.15,
+      );
       draw();
       const turning =
         Math.abs(targetYaw - yaw) > 0.0004 ||
         Math.abs(targetPitch - pitch) > 0.0004 ||
         Math.abs(yawSpeed) > 0.002 ||
-        Math.abs(pitchSpeed) > 0.002;
+        Math.abs(pitchSpeed) > 0.002 ||
+        slip > 0;
       if (turning || seamMoved) frame = requestAnimationFrame(loop);
       else {
         lastFrame = 0;

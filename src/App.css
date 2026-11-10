@@ -742,6 +742,10 @@ summary:focus-visible {
   width: 3px;
   margin-left: -1px;
   background: var(--yellow);
+  /* the cut glows, as if lit from the blueprint side */
+  box-shadow:
+    0 0 10px 1px rgba(255, 255, 0, 0.75),
+    0 0 36px 4px rgba(255, 255, 0, 0.25);
 }
 .bust-still {
   position: absolute;

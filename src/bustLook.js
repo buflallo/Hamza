@@ -30,6 +30,15 @@ export function addBustLights(scene) {
   scene.add(key, rim);
 }
 
+// A warm light, like a torch in a chapel, that the live scene moves with the
+// cursor across the face. Starts in front, a little above.
+export function addTorch(scene) {
+  const torch = new THREE.PointLight(0xffcf94, 0.9, 0, 2);
+  torch.position.set(0, 0.25, 1.15);
+  scene.add(torch);
+  return torch;
+}
+
 // The painted ceiling as the light around the head: the painting fills the
 // sky, the ground fades to the page's dark. Prefiltered for every roughness.
 export function loadEnvironment(renderer) {
@@ -125,7 +134,7 @@ marble *= 0.94 + 0.06 * fbm(mp * 6.0);
 float open = mix(1.0, smoothstep(0.02, 0.78, vShade), uHasShade);
 float seamX = uRes.x * (1.0 - uSeam);
 float blue = step(seamX, gl_FragCoord.x);
-diffuseColor.rgb = mix(marble, vec3(0.027, 0.0015, 0.64), blue);
+diffuseColor.rgb = mix(marble, vec3(0.02, 0.001, 0.5), blue);
 // carved folds hold shadow even in direct light
 diffuseColor.rgb *= mix(1.0, pow(open, 1.3), 0.55);`,
       )
@@ -161,13 +170,28 @@ reflectedLight.indirectSpecular *= mix(1.0, open, 0.85);`,
         "#include <emissivemap_fragment>",
         `#include <emissivemap_fragment>
 float yy = vP.y / uHeight * 70.0;
-float contour = 1.0 - min(abs(fract(yy) - 0.5) / max(fwidth(yy), 1e-4), 1.0);
+float lineDist = abs(fract(yy) - 0.5) / max(fwidth(yy), 1e-4);
+float contour = 1.0 - min(lineDist, 1.0);
+// the scan glows from inside: a soft halo around each line
+contour += 0.18 * exp(-lineDist * 0.5);
 float rim = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
 totalEmissiveRadiance += blue * vec3(0.75, 1.0, 0.0) * (contour * 0.9 + rim * 0.5);
 // marble lets a little warm light through its thin, open edges
 totalEmissiveRadiance += (1.0 - blue) * vec3(0.95, 0.66, 0.42) * 0.07 * rim * open;
-float cut = 1.0 - smoothstep(0.0, 1.5 * uDpr, abs(gl_FragCoord.x - seamX));
+float seamDist = abs(gl_FragCoord.x - seamX) / uDpr;
+float cut = 1.0 - smoothstep(0.0, 1.5, seamDist);
+cut += 0.45 * exp(-seamDist * 0.18); // the cut glows onto the stone beside it
 totalEmissiveRadiance += vec3(1.0, 1.0, 0.0) * cut * step(0.002, uSeam) * step(uSeam, 0.998) * 2.0;`,
+      )
+      .replace(
+        "#include <dithering_fragment>",
+        `#include <dithering_fragment>
+// print grain: fixed to the screen like ink on paper, only on the bust
+{
+  vec2 g = floor(gl_FragCoord.xy / max(uDpr, 1.0));
+  float n = fract(sin(dot(g, vec2(12.9898, 78.233))) * 43758.5453);
+  gl_FragColor.rgb += (n - 0.5) * 0.045;
+}`,
       );
   };
   return { material, uniforms };
