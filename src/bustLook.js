@@ -17,13 +17,13 @@ float fbm(vec3 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n3(p);p*=2.03;a*=.5;
 
 export function setupRenderer(renderer) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
+  renderer.toneMappingExposure = 1.17;
 }
 
 // Warm key from the painting above, a cobalt rim from behind. The painting
 // itself (the environment) does the soft fill.
 export function addBustLights(scene) {
-  const key = new THREE.DirectionalLight(0xffe2b8, 2.1);
+  const key = new THREE.DirectionalLight(0xfff2e0, 2.1);
   key.position.set(-1.2, 1.5, 1.2);
   const rim = new THREE.DirectionalLight(0x5b3cff, 2.8);
   rim.position.set(1.4, 0.6, -1.2);
@@ -43,12 +43,22 @@ export function loadEnvironment(renderer) {
       canvas.height = h;
       const ctx = canvas.getContext("2d");
       const horizon = h * 0.56;
-      // sky: the painting, wrapped once around
+      // sky: the painting, wrapped once around, mostly drained of colour so
+      // it lights the stone white and only brushes it with the fresco's hues
       ctx.drawImage(image, 0, 0, w, horizon);
-      // ground: the painting's warm dark fading into the page colour
+      const sky = ctx.getImageData(0, 0, w, Math.ceil(horizon));
+      for (let i = 0; i < sky.data.length; i += 4) {
+        const [r, g, b] = [sky.data[i], sky.data[i + 1], sky.data[i + 2]];
+        const grey = 0.299 * r + 0.587 * g + 0.114 * b;
+        sky.data[i] = Math.min(255, (grey + (r - grey) * 0.4) * 1.12);
+        sky.data[i + 1] = Math.min(255, (grey + (g - grey) * 0.4) * 1.12);
+        sky.data[i + 2] = Math.min(255, (grey + (b - grey) * 0.4) * 1.12);
+      }
+      ctx.putImageData(sky, 0, 0);
+      // ground: a neutral dark fading into the page colour
       const ground = ctx.createLinearGradient(0, horizon - 40, 0, h);
-      ground.addColorStop(0, "rgba(70, 52, 40, 0.0)");
-      ground.addColorStop(0.12, "rgba(58, 44, 36, 1)");
+      ground.addColorStop(0, "rgba(64, 60, 58, 0.0)");
+      ground.addColorStop(0.12, "rgba(56, 53, 52, 1)");
       ground.addColorStop(1, "rgba(18, 16, 16, 1)");
       ctx.fillStyle = ground;
       ctx.fillRect(0, horizon - 40, w, h - horizon + 40);
@@ -78,13 +88,13 @@ export function bustMaterial(height, hasShade) {
     uHasShade: { value: hasShade ? 1 : 0 },
   };
   const material = new THREE.MeshPhysicalMaterial({
-    color: 0xf4f0e9,
+    color: 0xf7f5f1,
     roughness: 0.4,
     metalness: 0,
     clearcoat: 0.16,
     clearcoatRoughness: 0.45,
     sheen: 0.55,
-    sheenColor: new THREE.Color(0xffe2bf),
+    sheenColor: new THREE.Color(0xfff6ec),
     sheenRoughness: 0.6,
     envMapIntensity: 0.85,
   });
@@ -119,7 +129,7 @@ vec3 mp = vP / uHeight * 6.0;
 float mt = fbm(mp * 1.3);
 float vein = 1.0 - smoothstep(0.0, 0.12, abs(sin(mp.x * 1.7 + mp.y * 0.9 + mt * 7.0)));
 float fine = 1.0 - smoothstep(0.0, 0.035, abs(sin(mp.y * 3.1 - mp.z * 2.0 + fbm(mp * 2.7) * 9.0)));
-vec3 marble = mix(diffuseColor.rgb, vec3(0.56, 0.54, 0.57), vein * 0.5 + fine * 0.22);
+vec3 marble = mix(diffuseColor.rgb, vec3(0.58, 0.58, 0.61), vein * 0.5 + fine * 0.22);
 marble *= 0.94 + 0.06 * fbm(mp * 6.0);
 // how open this point is: 1 on the cheek, low deep in the ivy and curls
 float open = mix(1.0, smoothstep(0.02, 0.78, vShade), uHasShade);
@@ -165,7 +175,7 @@ float contour = 1.0 - min(abs(fract(yy) - 0.5) / max(fwidth(yy), 1e-4), 1.0);
 float rim = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 2.5);
 totalEmissiveRadiance += blue * vec3(0.75, 1.0, 0.0) * (contour * 0.9 + rim * 0.5);
 // marble lets a little warm light through its thin, open edges
-totalEmissiveRadiance += (1.0 - blue) * vec3(0.95, 0.66, 0.42) * 0.07 * rim * open;
+totalEmissiveRadiance += (1.0 - blue) * vec3(0.95, 0.82, 0.7) * 0.06 * rim * open;
 float cut = 1.0 - smoothstep(0.0, 1.5 * uDpr, abs(gl_FragCoord.x - seamX));
 totalEmissiveRadiance += vec3(1.0, 1.0, 0.0) * cut * step(0.002, uSeam) * step(uSeam, 0.998) * 2.0;`,
       );
