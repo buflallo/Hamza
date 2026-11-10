@@ -4,7 +4,8 @@ import Projects from "./Projects";
 
 afterEach(() => vi.restoreAllMocks());
 
-test("each project video has a pause control that toggles playback", () => {
+// jsdom has no media playback; make play/pause flip `paused` and fire events.
+const mockPlayback = () => {
   const pause = vi
     .spyOn(HTMLMediaElement.prototype, "pause")
     .mockImplementation(function pauseMock() {
@@ -24,36 +25,48 @@ test("each project video has a pause control that toggles playback", () => {
       this.dispatchEvent(new Event("play"));
       return Promise.resolve();
     });
+  return { play, pause };
+};
 
-  const { container } = render(<Projects />);
-  // jsdom never autoplays; browsers report paused = false once autoplay starts.
-  Object.defineProperty(container.querySelector("video"), "paused", {
-    value: false,
-    configurable: true,
-  });
-  const button = screen.getByRole("button", {
-    name: "Pause Minishell preview",
-  });
-  fireEvent.click(button);
-  expect(pause).toHaveBeenCalledTimes(1);
-  fireEvent.click(
-    screen.getByRole("button", { name: "Play Minishell preview" }),
-  );
-  expect(play).toHaveBeenCalledTimes(1);
-});
-
-test("videos do not autoplay when reduced motion is requested", () => {
+const reduceMotion = (reduce) =>
   vi.spyOn(window, "matchMedia").mockImplementation((query) => ({
-    matches: query.includes("reduce"),
+    matches: reduce && query.includes("reduce"),
     media: query,
     addEventListener() {},
     removeEventListener() {},
   }));
+
+test("each preview has a play control that toggles playback", () => {
+  const { play, pause } = mockPlayback();
+  render(<Projects />);
+  fireEvent.click(
+    screen.getByRole("button", { name: "Play Minishell preview" }),
+  );
+  expect(play).toHaveBeenCalledTimes(1);
+  fireEvent.click(
+    screen.getByRole("button", { name: "Pause Minishell preview" }),
+  );
+  expect(pause).toHaveBeenCalledTimes(1);
+});
+
+test("hovering a row plays its preview, leaving it pauses", () => {
+  reduceMotion(false);
+  const { play, pause } = mockPlayback();
+  render(<Projects />);
+  const row = screen.getByText("Webserv").closest("li");
+  fireEvent.mouseEnter(row);
+  expect(play).toHaveBeenCalledTimes(1);
+  fireEvent.mouseLeave(row);
+  expect(pause).toHaveBeenCalledTimes(1);
+});
+
+test("nothing plays on its own when reduced motion is requested", () => {
+  reduceMotion(true);
+  const { play } = mockPlayback();
   const { container } = render(<Projects />);
   container.querySelectorAll("video").forEach((video) => {
     expect(video.autoplay).toBe(false);
   });
-  expect(
-    screen.getByRole("button", { name: "Play Minishell preview" }),
-  ).toBeInTheDocument();
+  fireEvent.mouseEnter(screen.getByText("Webserv").closest("li"));
+  expect(play).not.toHaveBeenCalled();
 });

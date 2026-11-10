@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Look up projects</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face { font-family: "DeliriumNcv"; src: url("/_blob/b61ac729703d3bd67294c90868667b44") format("woff2"); font-display: swap; }
+@font-face { font-family: "PPFuji"; src: url("/_blob/771b904049c6e19fc0e9cdf8a7ffbab7") format("woff2"); font-weight: 700; font-display: swap; }
+body { margin: 0; background: #1D1B1B; }
+.d { font-family: 'DeliriumNcv', sans-serif; font-weight: 400; text-transform: uppercase; margin: 0; }
+.p { font-family: 'PPFuji', sans-serif; font-weight: 700; text-transform: uppercase; margin: 0; }
+.a { position: absolute; }
+.plate { animation: slip 6s steps(1,end) infinite; }
+.lbl { position: absolute; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+@keyframes slip { 0% { text-shadow: -5px -5px 0 #2E05D1; } 30% { text-shadow: -10px -4px 0 #2E05D1; } 34% { text-shadow: -4px -9px 0 #2E05D1; } 71% { text-shadow: -7px -7px 0 #2E05D1; } 100% { text-shadow: -5px -5px 0 #2E05D1; } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.layer { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") center/cover; }
+.ghost { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") 30% 60%/cover; filter: contrast(1.2) url(#ghost); opacity: .6; }
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; position: relative; overflow: hidden; background: #1D1B1B">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.18 1"/><feFuncG type="table" tableValues="0.02 1"/><feFuncB type="table" tableValues="0.82 0"/></feComponentTransfer></filter><filter id="ghost" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.18"/><feFuncG type="table" tableValues="0.1 0.02"/><feFuncB type="table" tableValues="0.1 0.82"/></feComponentTransfer></filter></svg>
+<div class="ghost" aria-hidden="true"></div>
+<h2 class="d plate a" style="left:72px;top:34px;font-size:96px;line-height:1;color:#fff"><img src="/_blob/4f2152d965a006a9edb6cc937b7d12b0" alt="" style="height:.78em;vertical-align:-.04em;margin-right:16px">Projects</h2>
+<div class="a" style="left:70px;top:190px;width:360px;height:360px;border-radius:50%;overflow:hidden;border:4px solid #E1FF00;box-shadow:12px 12px 0 #2E05D1"><img src="/_blob/62624a9cdf8a7f978f65f47b7d8d414a" alt="Minishell terminal session" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%"></div>
+<div class="a" style="left:500px;top:400px;width:300px;height:300px;border-radius:50%;overflow:hidden;border:4px solid #E1FF00;box-shadow:12px 12px 0 #2E05D1"><img src="/_blob/1cc442f27a7345f01333cd29a65c6c09" alt="Webserv HTTP server" style="display:block;width:100%;height:100%;object-fit:cover;object-position:75% 50%"></div>
+<div class="a" style="left:820px;top:150px;width:420px;height:420px;border-radius:50%;overflow:hidden;border:4px solid #E1FF00;box-shadow:12px 12px 0 #2E05D1"><img src="/_blob/51d6a961a2aa108a996ed3cced8ea453" alt="Cube3d raycasting demo" style="display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%"></div>
+<h3 class="d plate a" style="left:300px;top:170px;font-size:120px;line-height:1;color:#fff">Minishell</h3>
+<p class="p a" style="left:304px;top:296px;font-size:22px;color:#E1FF00">Software development</p>
+<h3 class="d plate a" style="left:150px;top:620px;font-size:120px;line-height:1;color:#fff">Webserv</h3>
+<p class="p a" style="left:154px;top:744px;font-size:22px;color:#E1FF00">Server development</p>
+<h3 class="d plate a" style="left:790px;top:570px;font-size:120px;line-height:1;color:#fff">Cube3d</h3>
+<p class="p a" style="left:794px;top:694px;font-size:22px;color:#E1FF00">Game development</p>
+<div class="lbl" style="left:860px;bottom:28px;color:#E1FF00;text-shadow:0 1px 6px rgba(0,0,0,.5)">Look up · each project is an opening in the ceiling, the title spills over its edge</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

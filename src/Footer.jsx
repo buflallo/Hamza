@@ -1,14 +1,20 @@
 import * as React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { CONTACT_EMAIL, CV_URL, SOCIAL_LINKS, TAGS } from "./data/content";
-import useColorTransition from "./hooks/useColorTransition";
+import {
+  CONTACT,
+  CONTACT_EMAIL,
+  CV_URL,
+  NAV_IDS,
+  OPEN_TO,
+  SOCIAL_LINKS,
+  TAGS,
+  sectionNumber,
+} from "./data/content";
 import useInView from "./hooks/useInView";
 
 const Letters = ({ text, start }) =>
   [...text].map((char, i) => (
     <span key={i} className="letter" style={{ "--i": start + i }}>
-      {char}
+      {char === " " ? "\u00a0" : char}
     </span>
   ));
 
@@ -18,178 +24,90 @@ const CONTACT_LINKS = [
   ...SOCIAL_LINKS,
 ].filter(Boolean);
 
+// The links carry on the index numbers after the five sections.
+const linkNumber = (i) => String(NAV_IDS.length + i + 1).padStart(2, "0");
+
+// The end looks up again: the painting returns, the bust faces it with you.
 export default function Footer() {
-  const color = useColorTransition();
   const [ref, inView] = useInView();
+  const [first, second] = CONTACT.title;
   return (
-    <Box
+    <footer
       ref={ref}
-      component="footer"
       id="Contact"
-      sx={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" },
-        justifyContent: "end",
-        minHeight: "100vh",
-        px: { xs: "4vw", md: 0 },
-        pb: { xs: "4vh", md: "5vh" },
-        gap: { md: "2vw" },
-        boxSizing: "border-box",
-      }}
+      className={`contact${inView ? " is-in" : ""}`}
     >
-      <Box
-        sx={{
-          width: "30%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "start",
-          alignItems: "start",
-          alignSelf: { xs: "start", md: "end" },
-          color: "#FFFFFF",
-        }}
-      >
-        <Box
-          component="h2"
-          className={`letters${inView ? " is-in" : ""}`}
-          sx={{ m: 0, font: "inherit" }}
-        >
-          <span className="visually-hidden">Let's connect</span>
-          <Typography
-            component="span"
-            aria-hidden="true"
-            className="misreg-hover soft"
-            sx={{ lineHeight: "1", display: "block" }}
-            color={color}
-            fontSize={{ xs: "100px", md: "calc(4rem + 12vw)" }}
-            variant="h3"
+      <img
+        className="contact-bust"
+        src="bust/up.webp"
+        alt="Marble bust of Hamza looking up at the painting"
+        width="784"
+        height="849"
+        loading="lazy"
+      />
+      <div className="contact-copy">
+        <p className="label">{sectionNumber("Contact")} · Contact</p>
+        <h2 className={`contact-title letters${inView ? " is-in" : ""}`}>
+          <span className="visually-hidden">
+            {first} {second}
+          </span>
+          <span aria-hidden="true" className="misreg-hover">
+            <Letters text={first} start={0} />
+          </span>
+          <span aria-hidden="true" className="misreg-hover">
+            <Letters text={second} start={first.length} />
+          </span>
+        </h2>
+        <p className="voice">{CONTACT.line}</p>
+        <ul className="tags" aria-label="Areas of expertise">
+          <li
+            className={`pill pill-open${inView ? " is-in" : ""}`}
+            style={{ "--i": 0, "--tilt": "-2deg" }}
           >
-            <Letters text="Let's" start={0} />
-          </Typography>
-          <Typography
-            component="span"
-            aria-hidden="true"
-            className="misreg-hover"
-            sx={{ lineHeight: "1", display: "block" }}
-            color={color}
-            fontSize={{ xs: "100px", md: "12vw" }}
-            variant="h3"
-          >
-            <Letters text="connect" start={6} />
-          </Typography>
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          alignSelf: { xs: "start", md: "end" },
-          width: { xs: "100%", md: "80%" },
-        }}
-      >
-        <Box
-          component="ul"
-          aria-label="Areas of expertise"
-          sx={{
-            m: 0,
-            p: 0,
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "start",
-            flexWrap: "wrap",
-            gap: "1vw",
-          }}
-        >
+            {OPEN_TO}
+          </li>
           {TAGS.map((tag, i) => (
-            <Box
+            <li
               key={tag}
-              component="li"
               className={`pill${inView ? " is-in" : ""}`}
-              style={{
-                "--i": i,
-                "--tilt": `${[-3, 2, -2, 3][i % 4]}deg`,
-              }}
-              sx={{
-                listStyle: "none",
-                border: "2px solid black",
-                borderRadius: "50px",
-                padding: "5px",
-                height: "min-content",
-                ml: i === 0 ? { xs: "0", md: "-3vw" } : 0,
-              }}
+              style={{ "--i": i + 1, "--tilt": `${[-3, 2, -2, 3][i % 4]}deg` }}
             >
-              <Typography color={color} variant="h6" component="span">
-                {tag}
-              </Typography>
-            </Box>
+              {tag}
+            </li>
           ))}
-        </Box>
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            mt: { xs: "20px", md: "calc(3rem + 5vh)" },
-            // alignSelf: "end",
-            // color: "#FFFFFF",
-          }}
-        >
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              // alignSelf: "end",
-              // color: "#FFFFFF",
-            }}
-          >
-            <Typography color={color} variant="h6" component="p">
-              HAVE A PROJECT IN MIND?
-            </Typography>
-            {/* <Button></Button> */}
-          </Box>
-          <Box
-            sx={{
-              borderTop: "2px solid black",
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              gap: "40px",
-              alignItems: "center",
-              // alignSelf: "end",
-              // color: "#FFFFFF",
-            }}
-          >
-            {CONTACT_LINKS.map(({ label, href }) => {
-              const external = href.startsWith("http");
-              return (
-                <Typography
-                  key={label}
-                  color={color}
-                  variant="h6"
-                  component="p"
+        </ul>
+        <ul className="contact-links">
+          {CONTACT_LINKS.map(({ label, href }, i) => {
+            const external = href.startsWith("http");
+            return (
+              <li key={label}>
+                <span className="num" aria-hidden="true">
+                  {linkNumber(i)}
+                </span>
+                <a
+                  href={href}
+                  className="link"
+                  {...(external && {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                  })}
                 >
-                  <a
-                    href={href}
-                    {...(external && {
-                      target: "_blank",
-                      rel: "noopener noreferrer",
-                    })}
-                    className="link"
-                    style={{ color: "inherit", textDecoration: "none" }}
-                  >
-                    {label.toUpperCase()}
-                    {external && (
-                      <span className="arrow" aria-hidden="true">
-                        {" ↗"}
-                      </span>
-                    )}
-                  </a>
-                </Typography>
-              );
-            })}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+                  {label}
+                  {external && (
+                    <span className="arrow" aria-hidden="true">
+                      {" ↗"}
+                    </span>
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <a className="contact-back" href="#top">
+          <span aria-hidden="true">↑ </span>
+          {CONTACT.back}
+        </a>
+      </div>
+    </footer>
   );
 }

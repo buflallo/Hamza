@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Look up skills</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face { font-family: "DeliriumNcv"; src: url("/_blob/b61ac729703d3bd67294c90868667b44") format("woff2"); font-display: swap; }
+@font-face { font-family: "PPFuji"; src: url("/_blob/771b904049c6e19fc0e9cdf8a7ffbab7") format("woff2"); font-weight: 700; font-display: swap; }
+body { margin: 0; background: #1D1B1B; }
+.d { font-family: 'DeliriumNcv', sans-serif; font-weight: 400; text-transform: uppercase; margin: 0; }
+.p { font-family: 'PPFuji', sans-serif; font-weight: 700; text-transform: uppercase; margin: 0; }
+.a { position: absolute; }
+.plate { animation: slip 6s steps(1,end) infinite; }
+.lbl { position: absolute; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+@keyframes slip { 0% { text-shadow: -5px -5px 0 #2E05D1; } 30% { text-shadow: -10px -4px 0 #2E05D1; } 34% { text-shadow: -4px -9px 0 #2E05D1; } 71% { text-shadow: -7px -7px 0 #2E05D1; } 100% { text-shadow: -5px -5px 0 #2E05D1; } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.layer { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") center/cover; }
+.ghost { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") 70% 30%/cover; filter: contrast(1.2) url(#ghost); opacity: .6; }
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; position: relative; overflow: hidden; background: #1D1B1B">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.18 1"/><feFuncG type="table" tableValues="0.02 1"/><feFuncB type="table" tableValues="0.82 0"/></feComponentTransfer></filter><filter id="ghost" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.18"/><feFuncG type="table" tableValues="0.1 0.02"/><feFuncB type="table" tableValues="0.1 0.82"/></feComponentTransfer></filter></svg>
+<div class="ghost" aria-hidden="true"></div>
+<h2 class="d plate a" style="left:72px;top:26px;font-size:60px;line-height:1;color:#fff;display:none">Skills</h2>
+<div class="a" style="left:72px;top:34px"><span class="d plate" style="font-size:96px;line-height:1;color:#fff"><img src="/_blob/4f2152d965a006a9edb6cc937b7d12b0" alt="" style="height:.78em;vertical-align:-.04em;margin-right:16px">Skills</span></div>
+<div class="a" style="left:72px;top:160px;width:1136px;height:200px;border-top:3px solid rgba(255,255,255,.35)"></div>
+<h3 class="d a" style="left:72px;top:166px;font-size:200px;line-height:1;color:#fff;white-space:nowrap"><span style="position:relative;z-index:0;display:inline-block">Software<i style="position:absolute;z-index:-1;left:-1%;bottom:12%;width:102%;height:.12em;background:#FFD100"></i></span></h3>
+<p class="p a" style="left:760px;top:194px;width:448px;font-size:19px;line-height:1.4;color:#fff">With a solid foundation in software development, I excel in languages like C, C++ and TypeScript, implementing efficient design patterns.</p>
+<div class="p a" style="left:764px;top:166px;font-size:14px;letter-spacing:.2em;color:#E1FF00">Development</div>
+<div class="a" style="left:72px;top:370px;width:1136px;height:200px;border-top:3px solid rgba(255,255,255,.35)"></div>
+<h3 class="d a" style="left:72px;top:376px;font-size:200px;line-height:1;color:#fff;white-space:nowrap"><span style="position:relative;z-index:0;display:inline-block">Frontend<i style="position:absolute;z-index:-1;left:-1%;bottom:12%;width:102%;height:.12em;background:#61DAFB"></i></span></h3>
+<p class="p a" style="left:760px;top:404px;width:448px;font-size:19px;line-height:1.4;color:#fff">Proficiency in crafting captivating interfaces with React, Vue.js, HTML and CSS, using Figma to shape intuitive, engaging experiences.</p>
+<div class="p a" style="left:764px;top:376px;font-size:14px;letter-spacing:.2em;color:#E1FF00">Development</div>
+<div class="a" style="left:72px;top:580px;width:1136px;height:200px;border-top:3px solid rgba(255,255,255,.35)"></div>
+<h3 class="d a" style="left:72px;top:586px;font-size:200px;line-height:1;color:#fff;white-space:nowrap"><span style="position:relative;z-index:0;display:inline-block">Backend<i style="position:absolute;z-index:-1;left:-1%;bottom:12%;width:102%;height:.12em;background:#E0234E"></i></span></h3>
+<p class="p a" style="left:760px;top:614px;width:448px;font-size:19px;line-height:1.4;color:#fff">Crafting resilient server-side systems with Nest.js and Laravel, plus MySQL and PostgreSQL for efficient data architecture and robust APIs.</p>
+<div class="p a" style="left:764px;top:586px;font-size:14px;letter-spacing:.2em;color:#E1FF00">Development</div>
+<div class="lbl" style="left:860px;bottom:28px;color:#E1FF00;text-shadow:0 1px 6px rgba(0,0,0,.5)">Look up · three skills as three lines of carved lettering, no cards</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Look up about</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@font-face { font-family: "DeliriumNcv"; src: url("/_blob/b61ac729703d3bd67294c90868667b44") format("woff2"); font-display: swap; }
+@font-face { font-family: "PPFuji"; src: url("/_blob/771b904049c6e19fc0e9cdf8a7ffbab7") format("woff2"); font-weight: 700; font-display: swap; }
+body { margin: 0; background: #1D1B1B; }
+.d { font-family: 'DeliriumNcv', sans-serif; font-weight: 400; text-transform: uppercase; margin: 0; }
+.p { font-family: 'PPFuji', sans-serif; font-weight: 700; text-transform: uppercase; margin: 0; }
+.a { position: absolute; }
+.plate { animation: slip 6s steps(1,end) infinite; }
+.lbl { position: absolute; font-family: 'PPFuji', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: .24em; text-transform: uppercase; }
+@keyframes slip { 0% { text-shadow: -5px -5px 0 #2E05D1; } 30% { text-shadow: -10px -4px 0 #2E05D1; } 34% { text-shadow: -4px -9px 0 #2E05D1; } 71% { text-shadow: -7px -7px 0 #2E05D1; } 100% { text-shadow: -5px -5px 0 #2E05D1; } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.layer { position: absolute; inset: -4%; background: url("/_blob/e8b2a5bebd954b6445d0792ebdbc14ac") center/cover; }
+.duo { filter: contrast(1.3) url(#duo); -webkit-mask-image: linear-gradient(200deg, #000 15%, transparent 70%); mask-image: linear-gradient(200deg, #000 15%, transparent 70%); }
+</style>
+</helmet>
+<div style="width: 1280px; height: 820px; position: relative; overflow: hidden; background: #1D1B1B">
+<svg width="0" height="0" style="position: absolute" aria-hidden="true"><filter id="duo" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.18 1"/><feFuncG type="table" tableValues="0.02 1"/><feFuncB type="table" tableValues="0.82 0"/></feComponentTransfer></filter><filter id="ghost" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncR type="table" tableValues="0.11 0.18"/><feFuncG type="table" tableValues="0.1 0.02"/><feFuncB type="table" tableValues="0.1 0.82"/></feComponentTransfer></filter></svg>
+<div class="layer" aria-hidden="true"></div>
+<div class="layer duo" aria-hidden="true"></div>
+<div class="a" style="inset:0;background:linear-gradient(90deg, rgba(29,27,27,.2), rgba(29,27,27,.78) 55%)" aria-hidden="true"></div>
+<div class="a" style="left:-80px;top:60px;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle, rgba(255,255,0,.7), rgba(255,255,0,0) 66%);mix-blend-mode:screen" aria-hidden="true"></div>
+<img class="a" src="/_blob/33dcfee73181e7317d0e487cd76fec5f" alt="Sculpted head crowned with vines" style="left:20px;top:90px;width:600px;height:754px;transform:scaleX(-1)">
+<h2 class="d plate a" style="left:640px;top:90px;width:580px;font-size:128px;line-height:.98;color:#fff">Hello I am Hamza.</h2>
+<p class="p a" style="left:644px;top:400px;width:560px;font-size:19px;line-height:1.38;color:#fff">As a full stack developer at 1337 Coding School, I'm passionate about crafting user-centric websites. With a degree in computer science and expertise in React, Nest, Laravel and Vue.js, I've led projects like dynamic multilingual platforms and responsive e-commerce sites. Now seeking internship opportunities.</p>
+<div class="lbl" style="left:72px;bottom:28px;color:#E1FF00;text-shadow:0 1px 6px rgba(0,0,0,.5)">Look up · the same figure, turned to face the text; the painting has become the light on him</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":820}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

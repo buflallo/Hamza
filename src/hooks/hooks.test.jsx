@@ -60,17 +60,27 @@ test("useActiveSection reports the section that is intersecting", () => {
   vi.unstubAllGlobals();
 });
 
-test("backdrop layers hand over: painting, print, ghost, then yellow", async () => {
+test("backdrop layers hand over: painting, print, dark, then the painting again", async () => {
   const { layerOpacities } = await import("./useBackgroundTransition");
   const top = layerOpacities(0, 5);
   expect(top.full).toBe(1);
-  expect(top.ghost).toBe(0);
+  expect(top.veil).toBe(0);
+  expect(top.foot).toBe(0);
   const middle = layerOpacities(3, 3);
   expect(middle.full).toBe(0);
   expect(middle.print).toBe(0);
-  expect(middle.ghost).toBeCloseTo(0.55);
+  expect(middle.veil).toBe(1);
   const bottom = layerOpacities(6, 0);
-  expect(bottom.ghost).toBe(0);
   expect(bottom.veil).toBe(0);
   expect(bottom.foot).toBe(1);
+});
+
+test("the seam opens with scroll through About", async () => {
+  const { seamFor } = await import("../BustScene");
+  // section top still in the lower half of the viewport: all marble
+  expect(seamFor(800, 1000, 1000)).toBe(0);
+  // section has left: all blueprint
+  expect(seamFor(-1000, 1000, 1000)).toBe(1);
+  // reading it: half and half
+  expect(seamFor(-100, 1000, 1000)).toBeCloseTo(0.5);
 });
