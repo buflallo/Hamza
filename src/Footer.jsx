@@ -41,8 +41,8 @@ export default function Footer() {
         className="contact-bust"
         src="bust/up.webp"
         alt="Marble bust of Hamza looking up at the painting"
-        width="784"
-        height="849"
+        width="782"
+        height="800"
         loading="lazy"
       />
       <div className="contact-copy">
