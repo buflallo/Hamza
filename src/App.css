@@ -514,9 +514,10 @@ summary:focus-visible {
 .hero-bust {
   position: absolute;
   z-index: 2;
-  right: 0;
-  top: calc(var(--top) + 6vh);
-  width: min(45.5vw, 74vh);
+  /* a portrait beside the headline, whole head in view, hoodie to the edge */
+  right: 7vw;
+  top: calc(var(--top) + 8vh);
+  width: min(38vw, 62vh);
 }
 .hero-bust picture,
 .hero-bust img,
@@ -748,7 +749,7 @@ summary:focus-visible {
   left: 50%;
   top: 52%;
   width: auto;
-  height: 74%;
+  height: 63%;
   max-width: none;
   transform: translate(-50%, -50%);
   transition: opacity 0.6s;

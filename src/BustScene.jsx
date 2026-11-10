@@ -11,8 +11,8 @@ THREE.Cache.enabled = true;
 // Hero: in marble profile, framed exactly like the still it replaces.
 const MODES = {
   about: {
-    cameraZ: 2.6,
-    lift: -0.07,
+    cameraZ: 3.05,
+    lift: -0.05,
     baseYaw: 0,
     turn: 0.55,
     tilt: 0.12,
