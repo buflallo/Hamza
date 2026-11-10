@@ -34,6 +34,11 @@ const MODES = {
   },
 };
 
+// The head's spring: stiffness and damping (just under critical, so it
+// arrives softly with no visible overshoot). Settles in about half a second.
+const SPRING = 60;
+const DAMPING = 2 * Math.sqrt(SPRING) * 0.95;
+
 const clamp01 = (v) => Math.min(1, Math.max(0, v));
 const smooth = (t) => t * t * (3 - 2 * t);
 
@@ -64,7 +69,9 @@ export default function BustScene({ stageRef, mode = "about" }) {
     } catch {
       return undefined; // no WebGL: the still image stays
     }
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Sharp enough on high-density screens without drawing 4x the pixels;
+    // drops further on its own if frames run slow (see `adapt`).
+    let dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     renderer.setPixelRatio(dpr);
     setupRenderer(renderer);
     renderer.domElement.className = "bust-canvas";
@@ -88,6 +95,9 @@ export default function BustScene({ stageRef, mode = "about" }) {
     let frame = 0;
     let yaw = 0;
     let pitch = 0;
+    let yawSpeed = 0;
+    let pitchSpeed = 0;
+    let slowFrames = 0;
     let targetYaw = 0;
     let targetPitch = 0;
     let lastFrame = 0;
@@ -131,20 +141,46 @@ export default function BustScene({ stageRef, mode = "about" }) {
         return;
       }
       const seamMoved = updateSeam();
-      // ease by time, not frames, so slow machines turn just as fast
       const dt = lastFrame ? Math.min(now - lastFrame, 100) : 16.7;
       lastFrame = now;
-      const ease = 1 - Math.pow(0.94, dt / 16.7);
-      yaw += (targetYaw - yaw) * ease;
-      pitch += (targetPitch - pitch) * ease;
+      adapt(dt);
+      // A soft spring toward the cursor: starts gently, follows quickly,
+      // settles without a bump. Stepped in small slices so it stays smooth
+      // and identical at any frame rate.
+      for (let left = dt / 1000; left > 0; left -= 1 / 240) {
+        const h = Math.min(left, 1 / 240);
+        yawSpeed += (SPRING * (targetYaw - yaw) - DAMPING * yawSpeed) * h;
+        pitchSpeed +=
+          (SPRING * (targetPitch - pitch) - DAMPING * pitchSpeed) * h;
+        yaw += yawSpeed * h;
+        pitch += pitchSpeed * h;
+      }
       pivot.rotation.set(pitch, setup.baseYaw + yaw, 0);
       draw();
       const turning =
         Math.abs(targetYaw - yaw) > 0.0004 ||
-        Math.abs(targetPitch - pitch) > 0.0004;
+        Math.abs(targetPitch - pitch) > 0.0004 ||
+        Math.abs(yawSpeed) > 0.002 ||
+        Math.abs(pitchSpeed) > 0.002;
       if (turning || seamMoved) frame = requestAnimationFrame(loop);
-      else lastFrame = 0;
+      else {
+        lastFrame = 0;
+        yawSpeed = 0;
+        pitchSpeed = 0;
+      }
     };
+    // If the machine cannot keep up (frames over ~28ms for a while), draw
+    // fewer pixels rather than stutter.
+    function adapt(dt) {
+      slowFrames = dt > 28 ? slowFrames + 1 : Math.max(0, slowFrames - 1);
+      if (slowFrames > 20 && dpr > 1) {
+        dpr = Math.max(1, dpr - 0.25);
+        renderer.setPixelRatio(dpr);
+        if (uniforms) uniforms.uDpr.value = dpr;
+        resize();
+        slowFrames = 0;
+      }
+    }
     const start = () => {
       if (!reduce && !frame) frame = requestAnimationFrame(loop);
     };
