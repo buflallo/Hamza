@@ -72,17 +72,22 @@ const ProjectDiagram = ({ title }) => (
   <div className="preview">
     <div className="preview-frame blueprint" style={{ aspectRatio: "1 / 1" }}>
       <div className="preview-diagram">
-        <Constellation nodes={EXPERIENCE.nodes.slice(0, 6)} size={440} />
+        <Constellation
+          nodes={EXPERIENCE.nodes}
+          mine={EXPERIENCE.mine}
+          size={440}
+        />
       </div>
       <p className="visually-hidden">
-        Diagram of {title}: {EXPERIENCE.nodes.join(", ")}.
+        Diagram of {title}. The parts I built: {EXPERIENCE.mine.join(", ")}.
       </p>
     </div>
   </div>
 );
 
 const Stratum = ({ project, index }) => {
-  const { title, category, layer, note, repo, demo, diagram } = project;
+  const { title, category, layer, note, repo, demo, press, diagram, media } =
+    project;
   const [ref, inView] = useInView();
   const videoRef = useRef(null);
   // Hovering or focusing a row plays its preview, unless motion is reduced.
@@ -136,7 +141,7 @@ const Stratum = ({ project, index }) => {
           )}
         </p>
         {note && <p className="stratum-note">{note}</p>}
-        {(repo || demo) && (
+        {(repo || demo || press) && (
           <p className="stratum-links">
             {repo && (
               <a href={repo} target="_blank" rel="noopener noreferrer">
@@ -148,14 +153,16 @@ const Stratum = ({ project, index }) => {
                 Live<span className="visually-hidden"> demo of {title}</span>
               </a>
             )}
+            {press && (
+              <a href={press} target="_blank" rel="noopener noreferrer">
+                Press<span className="visually-hidden"> about {title}</span>
+              </a>
+            )}
           </p>
         )}
       </div>
-      {diagram ? (
-        <ProjectDiagram title={title} />
-      ) : (
-        <ProjectMedia ref={videoRef} {...project} />
-      )}
+      {diagram && <ProjectDiagram title={title} />}
+      {!diagram && media && <ProjectMedia ref={videoRef} {...project} />}
     </li>
   );
 };

@@ -8,8 +8,20 @@ import { EXPERIENCE, sectionNumber } from "./data/content";
 export default function Experience() {
   const [ref, inView] = useInView();
   const rise = `rise${inView ? " is-in" : ""}`;
-  const { name, period, label, role, org, summary, nodes, numbers, details } =
-    EXPERIENCE;
+  const {
+    name,
+    period,
+    label,
+    role,
+    org,
+    summary,
+    press,
+    nodes,
+    mine,
+    numbers,
+    details,
+  } = EXPERIENCE;
+  const theirs = nodes.filter((node) => !mine.includes(node));
 
   return (
     <section
@@ -35,7 +47,18 @@ export default function Experience() {
           {role} · {org}
         </p>
         <p className={`body-text ${rise}`} style={{ "--rise-delay": "0.18s" }}>
-          {summary}
+          {summary}{" "}
+          <a
+            className="link"
+            href={press.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {press.label}
+            <span className="arrow" aria-hidden="true">
+              {" ↗"}
+            </span>
+          </a>
         </p>
         <ol className={`ledger ${rise}`} style={{ "--rise-delay": "0.26s" }}>
           {details.map(({ title, text }, i) => (
@@ -63,12 +86,18 @@ export default function Experience() {
           {/* the head loads when the section comes near, not with the page */}
           <Constellation
             nodes={nodes}
+            mine={mine}
             hub={inView ? "bust/blueprint.webp" : undefined}
           />
           <p className="visually-hidden">
-            Platform services: {nodes.join(", ")}.
+            Platform services I built: {mine.join(", ")}. Built by my teammates:{" "}
+            {theirs.join(", ")}.
           </p>
         </div>
+        <p className={`legend ${rise}`} aria-hidden="true">
+          <span className="legend-mine">What I built</span>
+          <span className="legend-theirs">The team’s</span>
+        </p>
         <dl className="numbers">
           {numbers.map(({ value, label: text }, i) => (
             <div

@@ -35,7 +35,7 @@ export const OPEN_TO = "Open to junior / mid roles";
 export const HERO = {
   lead: "Platform",
   rest: "& backend engineer",
-  text: "Python, Kubernetes and OpenStack. I led about ten engineers building a sovereign cloud for a university.",
+  text: "Python, Kubernetes and OpenStack. I built the managed services and the identity layer of AZUL Cloud, UM6P’s sovereign cloud.",
   open: "Open to backend · DevOps · platform roles",
   // The one line the rest of the page proves.
   voice: "Everyone looks up at the ceiling. I build what holds it up.",
@@ -45,7 +45,7 @@ export const HERO = {
 export const ABOUT = {
   title: "Hello, I am Hamza.",
   line: "I work on the side of the product nobody sees.",
-  text: "Python and Django control planes, Kubernetes, OpenStack, identity and GitOps. For two years I led about ten engineers on AZUL Cloud, a sovereign cloud for Mohammed VI Polytechnic University. I also ship interfaces in React and Vue, so I know what the platform is for.",
+  text: "Python and Django control planes, Kubernetes, OpenStack, identity and GitOps. I joined AZUL Cloud, the sovereign cloud of Mohammed VI Polytechnic University, as an intern and built its first app platform. I came back as a backend developer with a plan to grow it into CI/CD, managed databases, object storage and one IAM, and AZUL Cloud opened to public beta in June 2026. The architecture and designs are mine; coding agents help me write the code. I also ship interfaces in React and Vue, so I know what the platform is for.",
   facts: [
     { label: "Now", value: OPEN_TO },
     { label: "Focus", value: "Python backend · DevOps · platform" },
@@ -59,57 +59,69 @@ export const EXPERIENCE = {
   name: "AZUL Cloud",
   period: "2024 – 2026",
   label: "Underneath",
-  role: "Technical lead",
+  role: "Intern, then backend developer",
   org: "Mohammed VI Polytechnic University",
   summary:
-    "A sovereign, multi-tenant cloud built on-premises: IaaS, PaaS, managed databases, networking, identity and billing behind one account.",
+    "A sovereign, multi-tenant cloud built on-premises by a five-person team, opened to public beta in June 2026: compute, apps, managed databases, networking and identity behind one account.",
+  press: {
+    label: "Read the launch",
+    href: "https://www.moroccoworldnews.com/2026/06/325594/azul-cloud-moroccos-first-b2c-sovereign-cloud-platform-built-for-builders/",
+  },
+  // The whole platform, on a ring. `mine` lights the parts I built; the rest
+  // were my teammates' (frontend, Kubernetes, OpenStack).
   nodes: [
     "IAM",
-    "OpenStack",
-    "Kubernetes",
+    "Apps",
     "Databases",
     "Network",
-    "Billing",
-    "Notify",
-    "GitOps",
+    "Storage",
+    "OpenStack",
+    "Kubernetes",
+    "Compute",
+    "Onboarding",
   ],
+  mine: ["IAM", "Apps", "Databases", "Network", "Storage"],
   numbers: [
-    { value: "10", label: "engineers" },
-    { value: "13", label: "repositories" },
-    { value: "2,900", label: "commits" },
-    { value: "22+", label: "written decisions" },
+    { value: "5", label: "people on the team" },
+    { value: "2 of 8", label: "platform services I owned" },
+    { value: "22", label: "architecture decisions" },
+    { value: "2026", label: "public beta" },
   ],
   details: [
     {
-      title: "Platform control plane",
-      text: "Led the Django/Celery control plane that turns tenant requests into Kubernetes resources: builds from source with kpack, deploys through ArgoCD, provisions managed PostgreSQL (CloudNativePG) and MongoDB (Percona), with per-tenant Cilium network policies.",
+      title: "The first app platform",
+      text: "As an intern: apps from source to running on raw Kubernetes (deployments, services, Traefik ingress), built with kpack buildpacks, with build and runtime logs and a web terminal into the app.",
     },
     {
-      title: "IaaS on OpenStack",
-      text: "Oversaw the VM service (create, power, resize, snapshots, SSH keys) on Nova, Keystone and Vault, with a transactional outbox on RabbitMQ so no operation is lost or duplicated.",
+      title: "From hosting to CI/CD",
+      text: "Came back with a plan to make it a CI/CD platform, and built it: Helm templates rendered by the Django control plane and deployed through Argo CD, with Celery carrying releases and events so nothing is lost on a restart.",
+    },
+    {
+      title: "Managed databases and networking",
+      text: "PostgreSQL on CloudNativePG and MongoDB on Percona: provisioning, storage resize, scaling, hibernate and resume. Tenant networks on Cilium policies.",
+    },
+    {
+      title: "Object storage",
+      text: "S3 buckets on OpenStack Swift, with per-project S3 credentials and signed temporary URLs.",
     },
     {
       title: "Identity and authorization",
-      text: "Drove the shared IAM layer: Keycloak, an authorize API and OPA/Rego policies across compute, network, storage, PaaS and IAM, with provider credentials held per organization in Vault.",
+      text: "An IAM service built from scratch: organizations, invitations and membership, one authorize API on OPA, provider credentials per organization in Vault. It mirrors Kubernetes RBAC and OpenStack roles, so people share resources without adding load on the infrastructure.",
     },
     {
-      title: "Onboarding, billing, notifications",
-      text: "Delivered a saga-based onboarding service with compensation and idempotent retries, billing on OpenCost data, and event-driven notifications on RabbitMQ.",
+      title: "One home for the docs",
+      text: "The team’s central documentation: a scheduled GitLab job pulls each repository’s docs when they change and publishes them in one place.",
     },
     {
-      title: "Infrastructure and delivery",
-      text: "Oversaw Terraform and Ansible for OpenStack-Ansible and RKE2, GitOps with ArgoCD and Kustomize, and a cluster stack of Cilium, Rook-Ceph, Vault, Harbor, Prometheus and Tetragon.",
-    },
-    {
-      title: "Engineering rigor",
-      text: "Set the architecture rules (one owner per piece of state, no provider call without explicit authority, Postgres as source of truth), recorded in 22+ ADRs and enforced by guardrail and end-to-end tests.",
+      title: "How I work",
+      text: "I design the service and write the decision down (22 ADRs), then build and prove it on my own dev cluster before handing it to infra to run. Coding agents help write the code; the architecture and designs are mine.",
     },
   ],
 };
 
 export const PROJECTS_HEAD = {
   title: "What it stands on",
-  line: "Before the cloud: a shell, a web server, a game engine, a multiplayer game. Built from scratch at 1337.",
+  line: "Before the cloud, and alongside it: shells, servers and engines, then clusters and deploys. Built from scratch at 1337.",
   hint: "Hover a row to see it run",
 };
 
@@ -122,6 +134,24 @@ export const PROJECTS = [
     layer: "Structure",
     diagram: true,
     note: "Private repositories, so the story is told as a diagram.",
+    press:
+      "https://www.moroccoworldnews.com/2026/06/325594/azul-cloud-moroccos-first-b2c-sovereign-cloud-platform-built-for-builders/",
+  },
+  // No preview yet: add `repo` once the repositories are public.
+  {
+    title: "Inception-of-Things",
+    category: "Kubernetes with K3s, K3d and Argo CD",
+    layer: "Foundation",
+  },
+  {
+    title: "Cloud-1",
+    category: "A web stack deployed to the cloud with Ansible",
+    layer: "Foundation",
+  },
+  {
+    title: "Cybersecurity piscine",
+    category: "Offensive and defensive security exercises",
+    layer: "Foundation",
   },
   {
     title: "Minishell",
@@ -182,6 +212,21 @@ export const SKILLS = [
     description:
       "Resilient APIs and control planes in Python: Django, DRF and Celery, with PostgreSQL, Redis and RabbitMQ.",
     stack: ["Python", "Django", "Celery", "PostgreSQL", "RabbitMQ"],
+  },
+  {
+    id: "design",
+    title: "Design",
+    layer: "Frame",
+    color: "#FFFFFF",
+    description:
+      "How the services are shaped: bounded contexts with one owner for each piece of state, reconcile loops that bring the real world back to what was asked, idempotent APIs with an outbox so nothing is lost or done twice, fail-closed authorization, and every decision written down.",
+    stack: [
+      "Bounded contexts",
+      "Reconcile loops",
+      "Idempotency",
+      "Outbox",
+      "ADRs",
+    ],
   },
   {
     id: "devops",

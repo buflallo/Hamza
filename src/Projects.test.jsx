@@ -70,3 +70,12 @@ test("nothing plays on its own when reduced motion is requested", () => {
   fireEvent.mouseEnter(screen.getByText("Webserv").closest("li"));
   expect(play).not.toHaveBeenCalled();
 });
+
+test("a project without media shows no preview, and AZUL links its press", () => {
+  render(<Projects />);
+  const row = screen.getByText("Cloud-1").closest("li");
+  expect(row.querySelector("video")).toBeNull();
+  expect(
+    screen.getByRole("link", { name: "Press about AZUL Cloud" }),
+  ).toHaveAttribute("href", expect.stringContaining("moroccoworldnews.com"));
+});

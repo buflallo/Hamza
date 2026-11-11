@@ -214,6 +214,19 @@ header:hover .misreg {
   outline: 2px solid #2e05d1;
   outline-offset: 4px;
 }
+/* on the cobalt blueprint the link is lime, and its underline yellow */
+.blueprint .link {
+  color: var(--lime);
+  font-family: "PPFuji", sans-serif;
+  font-weight: bold;
+  text-decoration: none;
+}
+.blueprint .link::after {
+  background: #ffff00;
+}
+.blueprint .link:focus-visible {
+  outline-color: #ffff00;
+}
 .link .arrow {
   display: inline-block;
   transition: transform 0.15s steps(3);
@@ -916,6 +929,38 @@ summary:focus-visible {
   aspect-ratio: 1 / 1;
   margin: 0 auto;
 }
+/* which stars are mine: lit, or drawn in outline */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  margin: -16px 0 0;
+  font-family: "PPFuji", sans-serif;
+  font-weight: bold;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.legend span::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 9px;
+  vertical-align: -1px;
+  border-radius: 50%;
+}
+.legend-mine::before {
+  background: #ffff00;
+}
+.legend-theirs {
+  opacity: 0.6;
+}
+.legend-theirs::before {
+  border: 1.5px solid #fff;
+  box-sizing: border-box;
+}
 .numbers {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1215,6 +1260,14 @@ summary:focus-visible {
 }
 .band-backend {
   background-color: #262222;
+}
+.band-design {
+  background-color: #232029;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.035) 0 1px,
+    transparent 1px 14px
+  );
 }
 .band-devops {
   background-color: #211a3a;
