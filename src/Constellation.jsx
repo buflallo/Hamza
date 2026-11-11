@@ -9,13 +9,16 @@ const star = (cx, cy, outer = 13, inner = 5.5) =>
   }).join(" ");
 
 // The platform as a constellation: services on a ring, all wired to a hub.
+// With `mine`, those services are lit and the rest drawn in outline.
 // Decorative; the services are listed in text next to it for screen readers.
 export default function Constellation({
   nodes,
+  mine,
   hub,
   size = 520,
   fontSize = 13,
 }) {
+  const lit = (label) => !mine || mine.includes(label);
   const c = size / 2;
   const r = size * 0.3;
   const points = nodes.map((label, i) => {
@@ -41,8 +44,8 @@ export default function Constellation({
           y1={c}
           x2={x}
           y2={y}
-          stroke="#E1FF00"
-          strokeOpacity=".55"
+          stroke={lit(label) ? "#E1FF00" : "#fff"}
+          strokeOpacity={lit(label) ? ".7" : ".2"}
           strokeWidth="1.5"
           strokeDasharray="3 6"
         />
@@ -77,8 +80,17 @@ export default function Constellation({
         const dx = cos > 0.3 ? 22 : cos < -0.3 ? -22 : 0;
         const dy = sin < -0.5 ? -22 : sin > 0.5 ? 30 : 5;
         return (
-          <g key={`node-${label}`} className="constellation-node">
-            <polygon points={star(x, y)} fill="#FFFF00" />
+          <g
+            key={`node-${label}`}
+            className={`constellation-node${lit(label) ? "" : " is-theirs"}`}
+          >
+            <polygon
+              points={star(x, y)}
+              fill={lit(label) ? "#FFFF00" : "none"}
+              stroke={lit(label) ? "none" : "#fff"}
+              strokeOpacity=".6"
+              strokeWidth="1.5"
+            />
             <text
               x={x + dx}
               y={y + dy}
@@ -88,6 +100,7 @@ export default function Constellation({
               fontSize={fontSize}
               letterSpacing="2"
               fill="#fff"
+              fillOpacity={lit(label) ? 1 : 0.55}
             >
               {label.toUpperCase()}
             </text>
