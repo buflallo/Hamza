@@ -12,8 +12,8 @@ export const sectionNumber = (id) =>
   String(NAV_IDS.indexOf(id) + 1).padStart(2, "0");
 
 // Optional public contact details. Leave empty to hide the link.
-export const CONTACT_EMAIL = "";
-export const CV_URL = ""; // e.g. "cv.pdf" once the file is added to /public
+export const CONTACT_EMAIL = "ha.lachqar@gmail.com";
+export const CV_URL = "cv.pdf"; // the public copy: no phone number
 
 export const SOCIAL_LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/hamza-lachqar/" },
@@ -49,7 +49,7 @@ export const ABOUT = {
   facts: [
     { label: "Now", value: OPEN_TO },
     { label: "Focus", value: "Python backend · DevOps · platform" },
-    { label: "Trained", value: "1337 Coding School · CS degree" },
+    { label: "Trained", value: "1337 Coding School · MIP at FST Fès" },
   ],
   surface: "React · TS · Vue",
   underneath: "Python · Django · Kubernetes · OpenStack",
