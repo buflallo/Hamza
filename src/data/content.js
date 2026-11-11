@@ -67,8 +67,9 @@ export const EXPERIENCE = {
     label: "Read the launch",
     href: "https://www.moroccoworldnews.com/2026/06/325594/azul-cloud-moroccos-first-b2c-sovereign-cloud-platform-built-for-builders/",
   },
-  // The whole platform, on a ring. `mine` lights the parts I built; the rest
-  // were my teammates' (frontend, Kubernetes, OpenStack).
+  // The whole platform, on a ring. `mine` lights the services I built; the
+  // rest were my teammates' (Onboarding's flow I redesigned, its service is
+  // theirs).
   nodes: [
     "IAM",
     "Apps",
@@ -82,8 +83,8 @@ export const EXPERIENCE = {
   ],
   mine: ["IAM", "Apps", "Databases", "Network", "Storage"],
   numbers: [
-    { value: "5", label: "people on the team" },
-    { value: "2 of 8", label: "platform services I owned" },
+    { value: "5", label: "services I built" },
+    { value: "21", label: "months on AZUL" },
     { value: "22", label: "architecture decisions" },
     { value: "2026", label: "public beta" },
   ],
@@ -107,6 +108,10 @@ export const EXPERIENCE = {
     {
       title: "Identity and authorization",
       text: "An IAM service built from scratch: organizations, invitations and membership, one authorize API on OPA, provider credentials per organization in Vault. It mirrors Kubernetes RBAC and OpenStack roles, so people share resources without adding load on the infrastructure.",
+    },
+    {
+      title: "Tenant onboarding, redesigned",
+      text: "Replaced the onboarding saga with an activation coordinator: it asks IaaS to set up the tenant’s OpenStack side and PaaS its Kubernetes side (namespace, network, owner access), and tracks both through one set of activation states.",
     },
     {
       title: "One home for the docs",
